@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Din webside titel</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="background"></div>
+
+    <div class="grid-container">
+      <div class="grid-item header top-right">
+        <div class="headerText">My Header Text</div>
+        <div class="grid-item">
+          <i class="fas fa-bars burger-menu"></i>
+        </div>
+      </div>
+      <div class="grid-item centered row1"></div>
+      <div class="grid-item centered row2"></div>
+      <div class="grid-item centered row3"></div>
+      <div class="grid-item centered row4"></div>
+      <div class="grid-item top-left footer footerText"></div>
+    </div>
+
+    <dialog id="settings-dialog">
+      <form id="settings-form">
+        <label for="interval">Interval:</label>
+        <input type="number" id="interval" name="interval" min="1" required />
+
+        <label for="durationFormat">Duration Format:</label>
+        <input type="text" id="durationFormat" name="durationFormat" required />
+
+        <label for="timeFormat">Time Format:</label>
+        <input type="text" id="timeFormat" name="timeFormat" required />
+
+        <label for="row1Text">Row 1 Text:</label>
+        <input type="text" id="row1Text" name="row1Text" required />
+
+        <label for="row2Text">Row 2 Text:</label>
+        <input type="text" id="row2Text" name="row2Text" required />
+
+        <label for="row3Text">Row 3 Text:</label>
+        <input type="text" id="row3Text" name="row3Text" required />
+
+        <label for="row4Text">Row 4 Text:</label>
+        <input type="text" id="row4Text" name="row4Text" required />
+
+        <label for="timeupText">Time's Up Text:</label>
+        <input type="text" id="timeupText" name="timeupText" required />
+
+        <input type="submit" value="Submit" />
+      </form>
+    </dialog>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
