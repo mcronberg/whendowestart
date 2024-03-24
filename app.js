@@ -3,13 +3,15 @@ const settings = {
   interval: 1,
   minuteRoundUp: true,
   timeFormat: "hh:mm:ss A",
-  durationFormat: "m:s",
+  durationFormat: "mm:ss",
   row1Text: "Add text to line 1 {endTime}",
   row2Text: "Add text to line 2",
   row3Text: "Add text to line 3",
   row4Text: "{countdownValue} minutes left!",
   titleText: "Start in {countdownValue}",
   timeupText: "Time's up!",
+
+  menuColor: "black",
 
   headerFontSize: "12px",
   headerText: "When do we start?",
@@ -20,8 +22,10 @@ const settings = {
   footerColor: "black",
   footerHAlign: "center",
 
-  backgroundImage: "",
+  backgroundImage:
+    "https://cdn.pixabay.com/photo/2023/01/23/21/11/apple-7739714_1280.jpg",
   backgroundColor: "white",
+  addBlur: true,
 
   fontFamily: "Verdana",
 
@@ -131,8 +135,8 @@ function useSettings() {
     ".background"
   ).style.backgroundImage = `url(${settings.backgroundImage})`;
 
-  document.querySelector(".footerText").textContent = settings.footerText;
-  document.querySelector(".headerText").textContent = settings.headerText;
+  document.querySelector(".footerText span").textContent = settings.footerText;
+  document.querySelector(".headerText span").textContent = settings.headerText;
 
   document.querySelector(".footerText").style.fontSize =
     settings.footerFontSize;
@@ -163,6 +167,8 @@ function useSettings() {
   document.querySelector(".row2").style.color = settings.row2Color;
   document.querySelector(".row3").style.color = settings.row3Color;
   document.querySelector(".row4").style.color = settings.row4Color;
+
+  document.querySelector(".burger-menu-div").style.color = settings.menuColor;
 }
 
 function findEndTime(interval, rounded) {
@@ -190,10 +196,8 @@ function timerTick() {
       const duration = moment.duration(diffInMilliseconds);
       const diffDate = moment().startOf("day").add(duration);
       const formatted = diffDate.format(settings.durationFormat);
-      document.querySelector(".row4").textContent = settings.row4Text.replace(
-        "{countdownValue}",
-        formatted
-      );
+      document.querySelector(".row4 span").textContent =
+        settings.row4Text.replace("{countdownValue}", formatted);
       document.title = settings.titleText.replace(
         "{countdownValue}",
         formatted
@@ -233,21 +237,22 @@ document
     if (endTime !== undefined) {
       replace = endTime.format(settings.timeFormat);
     }
-    document.querySelector(".row1").textContent = settings.row1Text.replace(
-      "{endTime}",
-      replace
-    );
-    document.querySelector(".row2").textContent = settings.row2Text.replace(
-      "{endTime}",
-      replace
-    );
 
-    document.querySelector(".row3").textContent = settings.row3Text.replace(
-      "{endTime}",
-      replace
+    const rowElements = document.querySelectorAll(
+      ".row1 span, .row2 span, .row3 span, .row4 span, .burger-menu-div"
     );
+    rowElements.forEach((element) => element.classList.remove("blur"));
 
+    document.querySelector(".row1 span").textContent =
+      settings.row1Text.replace("{endTime}", replace);
+    document.querySelector(".row2 span").textContent =
+      settings.row2Text.replace("{endTime}", replace);
+    document.querySelector(".row3 span").textContent =
+      settings.row3Text.replace("{endTime}", replace);
     document.querySelector("#settings-dialog").close();
+
+    if (settings.addBlur)
+      rowElements.forEach((element) => element.classList.add("blur"));
 
     timerTick();
   });
