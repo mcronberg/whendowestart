@@ -29,32 +29,239 @@
     </div>
 
     <dialog id="settings-dialog">
+      <div class="tabs">
+        <button class="tab-link" data-tab="tab-quickstart">Quick start</button>
+        <button class="tab-link" data-tab="tab-background">Background</button>
+        <button class="tab-link" data-tab="tab-headerfooter">
+          Header/Footer
+        </button>
+        <button class="tab-link" data-tab="tab-textformat">Text format</button>
+      </div>
+
       <form id="settings-form">
-        <label for="interval">Interval:</label>
-        <input type="number" id="interval" name="interval" min="1" required />
+        <div id="tab-quickstart" class="tab-content">
+          <label for="interval">Interval:</label>
+          <input type="number" id="interval" name="interval" min="1" required />
 
-        <label for="durationFormat">Duration Format:</label>
-        <input type="text" id="durationFormat" name="durationFormat" required />
+          <label for="durationFormat">Duration Format:</label>
+          <input
+            type="text"
+            id="durationFormat"
+            name="durationFormat"
+            required
+          />
 
-        <label for="timeFormat">Time Format:</label>
-        <input type="text" id="timeFormat" name="timeFormat" required />
+          <label for="timeFormat">Time Format:</label>
+          <input type="text" id="timeFormat" name="timeFormat" required />
 
-        <label for="row1Text">Row 1 Text:</label>
-        <input type="text" id="row1Text" name="row1Text" required />
+          <label for="row1Text">Row 1 Text:</label>
+          <input type="text" id="row1Text" name="row1Text" />
 
-        <label for="row2Text">Row 2 Text:</label>
-        <input type="text" id="row2Text" name="row2Text" required />
+          <label for="row2Text">Row 2 Text:</label>
+          <input type="text" id="row2Text" name="row2Text" />
 
-        <label for="row3Text">Row 3 Text:</label>
-        <input type="text" id="row3Text" name="row3Text" required />
+          <label for="row3Text">Row 3 Text:</label>
+          <input type="text" id="row3Text" name="row3Text" />
 
-        <label for="row4Text">Row 4 Text:</label>
-        <input type="text" id="row4Text" name="row4Text" required />
+          <label for="row4Text">Row 4 Text:</label>
+          <input type="text" id="row4Text" name="row4Text" />
 
-        <label for="timeupText">Time's Up Text:</label>
-        <input type="text" id="timeupText" name="timeupText" required />
+          <label for="timeupText">Time's Up Text:</label>
+          <input type="text" id="timeupText" name="timeupText" />
+        </div>
 
-        <input type="submit" value="Submit" />
+        <div id="tab-headerfooter" class="tab-content">
+          <label for="headerText">Header Text:</label>
+          <input type="text" id="headerText" name="headerText" />
+
+          <label for="headerFontSize">Header Font Size:</label>
+          <input type="text" id="headerFontSize" name="headerFontSize" />
+
+          <label for="headerColor">Header Color:</label>
+          <input type="color" id="headerColor" name="headerColor" />
+
+          <!-- Footer settings -->
+          <label for="footerText">Footer Text:</label>
+          <input type="text" id="footerText" name="footerText" />
+
+          <label for="footerFontSize">Footer Font Size:</label>
+          <input type="text" id="footerFontSize" name="footerFontSize" />
+
+          <label for="footerColor">Footer Color:</label>
+          <input type="color" id="footerColor" name="footerColor" />
+
+          <label for="footerHAlign">Footer Horizontal Align:</label>
+          <input type="text" id="footerHAlign" name="footerHAlign" />
+        </div>
+
+        <div id="tab-textformat" class="tab-content">
+          <!-- Font Family -->
+          <label for="fontFamily">Font Family:</label>
+          <input
+            type="text"
+            id="fontFamily"
+            name="fontFamily"
+            placeholder="Verdana"
+          />
+
+          <!-- Row Font Sizes -->
+          <label for="row1FontSize">Row 1 Font Size:</label>
+          <input
+            type="text"
+            id="row1FontSize"
+            name="row1FontSize"
+            placeholder="32px"
+          />
+
+          <label for="row2FontSize">Row 2 Font Size:</label>
+          <input
+            type="text"
+            id="row2FontSize"
+            name="row2FontSize"
+            placeholder="32px"
+          />
+
+          <label for="row3FontSize">Row 3 Font Size:</label>
+          <input
+            type="text"
+            id="row3FontSize"
+            name="row3FontSize"
+            placeholder="32px"
+          />
+
+          <label for="row4FontSize">Row 4 Font Size:</label>
+          <input
+            type="text"
+            id="row4FontSize"
+            name="row4FontSize"
+            placeholder="32px"
+          />
+
+          <!-- Row Colors -->
+          <label for="row1Color">Row 1 Color:</label>
+          <input
+            type="color"
+            id="row1Color"
+            name="row1Color"
+            placeholder="#000000"
+          />
+
+          <label for="row2Color">Row 2 Color:</label>
+          <input
+            type="color"
+            id="row2Color"
+            name="row2Color"
+            placeholder="#000000"
+          />
+
+          <label for="row3Color">Row 3 Color:</label>
+          <input
+            type="color"
+            id="row3Color"
+            name="row3Color"
+            placeholder="#000000"
+          />
+
+          <label for="row4Color">Row 4 Color:</label>
+          <input
+            type="color"
+            id="row4Color"
+            name="row4Color"
+            placeholder="#000000"
+          />
+
+          <!-- Row Vertical Alignment -->
+          <label for="row1VAlign">Row 1 Vertical Align:</label>
+          <input
+            type="text"
+            id="row1VAlign"
+            name="row1VAlign"
+            placeholder="center"
+          />
+
+          <label for="row2VAlign">Row 2 Vertical Align:</label>
+          <input
+            type="text"
+            id="row2VAlign"
+            name="row2VAlign"
+            placeholder="center"
+          />
+
+          <label for="row3VAlign">Row 3 Vertical Align:</label>
+          <input
+            type="text"
+            id="row3VAlign"
+            name="row3VAlign"
+            placeholder="center"
+          />
+
+          <label for="row4VAlign">Row 4 Vertical Align:</label>
+          <input
+            type="text"
+            id="row4VAlign"
+            name="row4VAlign"
+            placeholder="center"
+          />
+
+          <!-- Row Horizontal Alignment -->
+          <label for="row1HAlign">Row 1 Horizontal Align:</label>
+          <input
+            type="text"
+            id="row1HAlign"
+            name="row1HAlign"
+            placeholder="center"
+          />
+
+          <label for="row2HAlign">Row 2 Horizontal Align:</label>
+          <input
+            type="text"
+            id="row2HAlign"
+            name="row2HAlign"
+            placeholder="center"
+          />
+
+          <label for="row3HAlign">Row 3 Horizontal Align:</label>
+          <input
+            type="text"
+            id="row3HAlign"
+            name="row3HAlign"
+            placeholder="center"
+          />
+
+          <label for="row4HAlign">Row 4 Horizontal Align:</label>
+          <input
+            type="text"
+            id="row4HAlign"
+            name="row4HAlign"
+            placeholder="center"
+          />
+        </div>
+
+        <div id="tab-background" class="tab-content">
+          <!-- Background Image -->
+          <label for="backgroundImage">Background Image URL:</label>
+          <input
+            type="text"
+            id="backgroundImage"
+            name="backgroundImage"
+            placeholder="Enter image URL"
+          />
+
+          <!-- Background Color -->
+          <label for="backgroundColor">Background Color:</label>
+          <input
+            type="text"
+            id="backgroundColor"
+            name="backgroundColor"
+            placeholder="#FFFFFF"
+            value="white"
+          />
+        </div>
+
+        <div id="submitSection">
+          <a id="dynamicLink" href="#" target="_blank">Save/test settings</a>
+          <input type="submit" value="Save values and start" />
+        </div>
       </form>
     </dialog>
 

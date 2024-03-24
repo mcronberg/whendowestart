@@ -1,4 +1,5 @@
 const settings = {
+  baseUrl: "http://127.0.0.1:5500/",
   interval: 1,
   minuteRoundUp: true,
   timeFormat: "hh:mm:ss A",
@@ -10,37 +11,38 @@ const settings = {
   titleText: "Start in {countdownValue}",
   timeupText: "Time's up!",
 
-  row1Color: "black",
-  row2Color: "black",
-  row3Color: "black",
-  row4Color: "black",
-  footerColor: "black",
+  headerFontSize: "12px",
+  headerText: "When do we start?",
   headerColor: "black",
 
   footerText: "www.whendowestart.com",
   footerFontSize: "12px",
-
-  headerFontSize: "12px",
-  headerText: "When do we start?",
+  footerColor: "black",
+  footerHAlign: "center",
 
   backgroundImage: "",
   backgroundColor: "white",
 
   fontFamily: "Verdana",
 
-  row1VAlign: "center",
-  row2VAlign: "center",
-  row3VAlign: "center",
-  row4VAlign: "center",
-  footerHAlign: "center",
-  row1HAlign: "center",
-  row2HAlign: "center",
-  row3Hlign: "center",
-  row4Hlign: "center",
   row1FontSize: "32px",
   row2FontSize: "32px",
   row3FontSize: "32px",
   row4FontSize: "32px",
+
+  row1Color: "black",
+  row2Color: "black",
+  row3Color: "black",
+  row4Color: "black",
+
+  row1VAlign: "center",
+  row2VAlign: "center",
+  row3VAlign: "center",
+  row4VAlign: "center",
+  row1HAlign: "center",
+  row2HAlign: "center",
+  row3HAlign: "center",
+  row4HAlign: "center",
 };
 
 window.onload = function () {
@@ -57,6 +59,67 @@ window.onload = function () {
     }
   }
   useSettings();
+
+  const tabs = document.querySelectorAll(".tab-link");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", function () {
+      const target = document.getElementById(this.getAttribute("data-tab"));
+
+      tabContents.forEach((tc) => {
+        tc.classList.remove("active");
+      });
+
+      tabs.forEach((t) => {
+        t.classList.remove("active");
+      });
+
+      target.classList.add("active");
+      this.classList.add("active");
+    });
+  });
+
+  // Optionally, activate the first tab by default
+  if (tabs.length > 0) {
+    tabs[0].click();
+  }
+
+  const settingsDialog = document.querySelector("#settings-dialog");
+  const dynamicLink = document.getElementById("dynamicLink");
+  const inputs = settingsDialog.querySelectorAll(
+    "input[type='text'], input[type='number'], input[type='color']"
+  );
+
+  const updateLink = () => {
+    const params = new URLSearchParams();
+    inputs.forEach((input) => {
+      // Only add parameter if input has a value
+      if (input.value) {
+        params.append(input.name, input.value);
+      }
+    });
+    dynamicLink.href = `${settings.baseUrl}?${params.toString()}&start=1`;
+  };
+
+  // Attach the event listener to each input field
+  inputs.forEach((input) => input.addEventListener("change", updateLink));
+
+  // Initial update in case there are any preset values
+  updateLink();
+
+  for (let key in settings) {
+    let input = document.querySelector(`#settings-form [name="${key}"]`);
+    if (input) {
+      input.value = settings[key];
+    }
+  }
+
+  const submitButton = document.querySelector(
+    '#settings-form input[type="submit"]'
+  );
+  // Trigger a click event on the submit button
+  submitButton.click();
 };
 
 function useSettings() {

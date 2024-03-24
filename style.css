@@ -59,11 +59,11 @@ html {
   align-items: center;
 }
 
-#settings-form {
+/* #settings-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-}
+} */
 
 #settings-form label {
   grid-column: 1;
@@ -71,4 +71,40 @@ html {
 
 #settings-form input {
   grid-column: 2;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.tabs {
+  margin-bottom: 20px;
+}
+
+.tab-link {
+  background: #ddd;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.tab-link.active {
+  background: #aaa;
+}
+
+.tab-content.active {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+#submitSection {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* This will vertically center align the items if needed */
 }
