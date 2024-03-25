@@ -22,10 +22,6 @@
         </div>
       </div>
       <div class="main"></div>
-      <div class="grid-item centered row1"><span></span></div>
-      <div class="grid-item centered row2"><span></span></div>
-      <div class="grid-item centered row3"><span></span></div>
-      <div class="grid-item centered row4"><span></span></div>
       <div class="grid-item top-left footer footerText"><span></span></div>
     </div>
 
@@ -40,6 +36,7 @@
       </div>
 
       <form id="settings-form">
+        <!--
         <div id="tab-quickstart" class="tab-content">
           <label for="interval">Interval:</label>
           <input type="number" id="interval" name="interval" min="1" required />
@@ -81,7 +78,7 @@
           <label for="headerColor">Header Color:</label>
           <input type="color" id="headerColor" name="headerColor" />
 
-          <!-- Footer settings -->
+          
           <label for="footerText">Footer Text:</label>
           <input type="text" id="footerText" name="footerText" />
 
@@ -96,7 +93,7 @@
         </div>
 
         <div id="tab-textformat" class="tab-content">
-          <!-- Font Family -->
+          
           <label for="fontFamily">Font Family:</label>
           <input
             type="text"
@@ -105,7 +102,7 @@
             placeholder="Verdana"
           />
 
-          <!-- Row Font Sizes -->
+          
           <label for="row1FontSize">Row 1 Font Size:</label>
           <input
             type="text"
@@ -138,7 +135,7 @@
             placeholder="32px"
           />
 
-          <!-- Row Colors -->
+
           <label for="row1Color">Row 1 Color:</label>
           <input
             type="color"
@@ -171,7 +168,7 @@
             placeholder="#000000"
           />
 
-          <!-- Row Vertical Alignment -->
+          
           <label for="row1VAlign">Row 1 Vertical Align:</label>
           <input
             type="text"
@@ -204,7 +201,7 @@
             placeholder="center"
           />
 
-          <!-- Row Horizontal Alignment -->
+          
           <label for="row1HAlign">Row 1 Horizontal Align:</label>
           <input
             type="text"
@@ -239,7 +236,7 @@
         </div>
 
         <div id="tab-background" class="tab-content">
-          <!-- Background Image -->
+          
           <label for="backgroundImage">Background Image URL:</label>
           <input
             type="text"
@@ -248,7 +245,7 @@
             placeholder="Enter image URL"
           />
 
-          <!-- Background Color -->
+          
           <label for="backgroundColor">Background Color:</label>
           <input
             type="text"
@@ -258,7 +255,7 @@
             value="white"
           />
         </div>
-
+-->
         <div id="submitSection">
           <a id="dynamicLink" href="#" target="_blank">Save/test settings</a>
           <input type="submit" value="Save values and start" />
@@ -266,7 +263,13 @@
       </form>
     </dialog>
 
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"
+      integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>

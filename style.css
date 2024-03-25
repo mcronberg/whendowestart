@@ -18,8 +18,7 @@ html {
 .grid-container {
   display: grid;
   height: 100%;
-  grid-template-rows: 50px 1fr 1fr 1fr 1fr 50px;
-  
+  grid-template-rows: 50px 1fr 50px;
 }
 
 .grid-item {
@@ -29,42 +28,48 @@ html {
   padding: 10px;
 }
 
-.centered {
-  justify-content: center;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Centers items vertically in the container */
+  padding: 0 20px; /* Add some padding on both sides */
 }
 
-.right-aligned {
-  justify-content: flex-end;
+.headerText {
+  flex-grow: 1;
+  text-align: center;
 }
 
-.top-right {
-  justify-content: flex-end;
-  align-items: flex-start; /* Adjust if you want the text vertically centered */
-  padding-right: 10px;
+.burger-menu-div {
+  /* If you need the burger menu to be on the extreme right */
+  margin-left: auto;
 }
 
-.top-left {
-  justify-content: flex-start;
-  align-items: flex-end; /* Adjust if you want the text vertically centered */
-  padding-left: 10px; /* Corrected from padding-right to padding-left */
+/* Ensure the burger menu icon is aligned correctly */
+.burger-menu {
+  font-size: 24px; /* Adjust size as needed */
 }
 
 .burger-menu {
     cursor: pointer;
   }
 
-.blur{
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;  /* flex-start, center, flex-end */
+    align-items: flex-start; /* flex-start, center, flex-end */
+    height: 100%; /* This ensures the div takes up the full height of its parent */    
+    margin: 200px 0px 0px 200px;
+  }
+
+  .blur{
   border-radius: 20px;  
-  background: rgba(5, 255, 255, 0.05); 
-  padding: 20px;
+  background: rgba(211, 211, 211, 0.3);   
   backdrop-filter: blur(10px);  
+  padding: 20px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 /* #settings-form {
   display: grid;
