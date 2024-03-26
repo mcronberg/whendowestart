@@ -1,32 +1,33 @@
 export const defaultSettings = {
   baseUrl: "http://127.0.0.1:5500/",
+  culture: "en-US",
   interval: 10,
   minuteRoundUp: true,
   urlToRestService: "", // "https://api.github.com/search/repositories?q=whendowestart" {{getProperty (getItem calculated.restServiceResponse.items 0) 'archive_url'}}
-  timeFormat: "hh:mm:ss A",
-  durationFormat: "mm:ss",
-  mainText:
-    "We will start in {{format calculated.endTime 'HH:mm:ss'}} ({{numberAsBinaryString calculated.diffInMinutes}}) --  -- {{calculated.diffFormatted}}",
+
+  mainText: "<h1>My text</h1><p>My paragraph!</p>",
+
+  mainTextHAlign: "center",
+  mainTextVAlign: "center",
+
   timeupText: "Time's up!",
 
-  titleText: "Start in {{numberAsBinaryString calculated.diffInSeconds}}",
+  titleText: "My title",
 
   menuColor: "black",
 
   headerFontSize: "12px",
-  headerText: "When do we start? {{calculated.dayOfWeek}}",
+  headerText: "My header {{calculated.dayOfWeek}}",
   headerColor: "black",
 
-  footerText: "www.whendowestart.com {{calculated.dayOfWeek}}",
+  footerText: "My footer",
   footerFontSize: "12px",
   footerColor: "black",
   footerHAlign: "center",
 
   backgroundImage: "",
   backgroundColor: "white",
-  addBlur: true,
+  addBlur: false,
 
   fontFamily: "Verdana",
-
-  mainTextAlign: "center",
 };

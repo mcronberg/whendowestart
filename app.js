@@ -18,16 +18,12 @@ window.onload = function () {
   settings.calculated = {};
   settings.calculated.restServiceResponse = {};
   settings.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
-  if (
-    settings.urlToRestService !== undefined &&
-    settings.urlToRestService !== ""
-  ) {
+  if (settings.urlToRestService !== undefined && settings.urlToRestService !== "") {
     {
       fetch(settings.urlToRestService)
         .then((response) => response.json())
         .then((data) => {
           settings.calculated.restServiceResponse = data;
-          console.log(settings);
         });
     }
   }
@@ -35,30 +31,43 @@ window.onload = function () {
   updateUI();
   timerTick();
 
-  // const tabs = document.querySelectorAll(".tab-link");
-  // const tabContents = document.querySelectorAll(".tab-content");
+  const tabs = document.querySelectorAll(".tab-link");
+  const tabContents = document.querySelectorAll(".tab-content");
 
-  // tabs.forEach((tab) => {
-  //   tab.addEventListener("click", function () {
-  //     const target = document.getElementById(this.getAttribute("data-tab"));
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", function () {
+      const target = document.getElementById(this.getAttribute("data-tab"));
 
-  //     tabContents.forEach((tc) => {
-  //       tc.classList.remove("active");
-  //     });
+      tabContents.forEach((tc) => {
+        tc.classList.remove("active");
+      });
 
-  //     tabs.forEach((t) => {
-  //       t.classList.remove("active");
-  //     });
+      tabs.forEach((t) => {
+        t.classList.remove("active");
+      });
 
-  //     target.classList.add("active");
-  //     this.classList.add("active");
-  //   });
-  // });
+      target.classList.add("active");
+      this.classList.add("active");
+    });
+  });
 
-  // Optionally, activate the first tab by default
-  // if (tabs.length > 0) {
-  //   tabs[0].click();
-  // }
+  if (tabs.length > 0) {
+    tabs[0].click();
+  }
+  const toolbarOptions = [
+    ["bold", "italic", "underline", "strike"], // toggled buttons
+    ["link"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+    ["clean"],
+  ];
+  const quill = new Quill("#mainText", {
+    modules: {
+      toolbar: toolbarOptions,
+    },
+    theme: "snow",
+  });
 
   // const settingsDialog = document.querySelector("#settings-dialog");
   // const dynamicLink = document.getElementById("dynamicLink");
@@ -98,32 +107,32 @@ window.onload = function () {
 };
 
 function updateUISettings() {
+  moment.locale(settings.culture);
+
   document.body.style.fontFamily = settings.fontFamily;
 
-  document.querySelector(".background").style.backgroundColor =
-    settings.backgroundColor;
-  document.querySelector(
-    ".background"
-  ).style.backgroundImage = `url(${settings.backgroundImage})`;
+  document.querySelector(".background").style.backgroundColor = settings.backgroundColor;
+  document.querySelector(".background").style.backgroundImage = `url(${settings.backgroundImage})`;
 
   document.querySelector(".footerText span").textContent = settings.footerText;
   document.querySelector(".headerText span").textContent = settings.headerText;
 
-  document.querySelector(".footerText").style.fontSize =
-    settings.footerFontSize;
-  document.querySelector(".headerText").style.fontSize =
-    settings.headerFontSize;
+  document.querySelector(".footerText").style.fontSize = settings.footerFontSize;
+  document.querySelector(".headerText").style.fontSize = settings.headerFontSize;
 
   document.querySelector(".footerText").style.color = settings.footerColor;
   document.querySelector(".headerText").style.color = settings.headerColor;
 
-  document.querySelector(".footer").style.justifyContent =
-    settings.footerHAlign;
+  document.querySelector(".footer").style.justifyContent = settings.footerHAlign;
+
+  document.querySelector(".main").style.justifyContent = settings.mainHAlign;
+  document.querySelector(".main").style.alignItems = settings.mainVAlign;
 
   document.querySelector(".burger-menu-div").style.color = settings.menuColor;
 }
 
 function timerTick() {
+  let visible = false;
   const countdown = setInterval(() => {
     if (moment().isAfter(settings.endTime)) {
       clearInterval(countdown);
@@ -135,45 +144,26 @@ function timerTick() {
       settings.calculated.month = moment().format("MMMM");
       settings.calculated.day = moment().format("DD");
       settings.calculated.time = moment().format(settings.timeFormat);
-      settings.calculated.endTime = findEndTime(
-        settings.interval,
-        settings.minuteRoundUp
-      );
+      settings.calculated.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
 
       settings.calculated.diffInMilliseconds = settings.endTime.diff(moment());
-      settings.calculated.diffInMinutes = settings.endTime.diff(
-        moment(),
-        "minutes"
-      );
-      settings.calculated.diffInSeconds = settings.endTime.diff(
-        moment(),
-        "seconds"
-      );
+      settings.calculated.diffInMinutes = settings.endTime.diff(moment(), "minutes");
+      settings.calculated.diffInSeconds = settings.endTime.diff(moment(), "seconds");
       const duration = moment.duration(settings.calculated.diffInMilliseconds);
-      const diffDate = moment().startOf("day").add(duration);
-      const formatted = diffDate.format(settings.durationFormat);
-      settings.calculated.diffFormatted = formatted;
+      const diff = moment().startOf("day").add(duration);
+      settings.calculated.diff = diff;
 
-      settings.calculated.mainText = compileTemplate(
-        settings.mainText,
-        settings
-      );
-      settings.calculated.titleText = compileTemplate(
-        settings.titleText,
-        settings
-      );
-
-      settings.calculated.headerText = compileTemplate(
-        settings.headerText,
-        settings
-      );
-
-      settings.calculated.footerText = compileTemplate(
-        settings.footerText,
-        settings
-      );
+      settings.calculated.mainText = compileTemplate(settings.mainText, settings);
+      settings.calculated.titleText = compileTemplate(settings.titleText, settings);
+      settings.calculated.headerText = compileTemplate(settings.headerText, settings);
+      settings.calculated.footerText = compileTemplate(settings.footerText, settings);
 
       updateUI();
+
+      if (!visible) {
+        document.querySelector(".grid-container").style.visibility = "visible";
+        visible = true;
+      }
     }
   }, 1000);
 }
@@ -181,14 +171,8 @@ function timerTick() {
 function updateUI() {
   document.title = settings.calculated.titleText;
   document.querySelector(".main").innerHTML = settings.calculated.mainText;
-  document.querySelector(".headerText").innerHTML =
-    settings.calculated.headerText;
-  document.querySelector(".footerText").innerHTML =
-    settings.calculated.footerText;
-}
-
-function numberAsBinaryString(value) {
-  return value.toString(2);
+  document.querySelector(".headerText").innerHTML = settings.calculated.headerText;
+  document.querySelector(".footerText").innerHTML = settings.calculated.footerText;
 }
 
 function findEndTime(interval, rounded) {
@@ -205,51 +189,40 @@ function findEndTime(interval, rounded) {
   return t;
 }
 
-// const dialog = document.querySelector("#settings-dialog");
-// const burgerMenu = document.querySelector(".burger-menu");
+const dialog = document.querySelector("#settings-dialog");
+const burgerMenu = document.querySelector(".burger-menu");
 
-// burgerMenu.addEventListener("click", () => {
-//   for (let key in settings) {
-//     let input = document.querySelector(`#settings-form [name="${key}"]`);
-//     if (input) {
-//       input.value = settings[key];
-//     }
-//   }
-//   dialog.showModal();
-// });
+burgerMenu.addEventListener("click", () => {
+  for (let key in settings) {
+    let input = document.querySelector(`#settings-form [name="${key}"]`);
+    if (input) {
+      console.log(key);
+      input.value = settings[key];
+    }
+  }
 
-// document
-//   .querySelector("#settings-form")
-//   .addEventListener("submit", function (event) {
-//     event.preventDefault();
+  dialog.showModal();
+});
 
-//     for (let key in settings) {
-//       let input = document.querySelector(`#settings-form [name="${key}"]`);
-//       if (input) {
-//         settings[key] = input.value;
-//       }
-//     }
+document.querySelector("#settings-form").addEventListener("submit", function (event) {
+  event.preventDefault();
 
-//     useSettings();
-//     endTime = findEndTime(settings.interval, true);
-//     let replace = "";
-//     if (endTime !== undefined) {
-//       replace = endTime.format(settings.timeFormat);
-//     }
+  for (let key in settings) {
+    let input = document.querySelector(`#settings-form [name="${key}"]`);
+    if (input) {
+      settings[key] = input.value;
+    }
+  }
 
-//     document.querySelector(".main").innerHTML = settings.mainText.replace(
-//       "{endTime}",
-//       replace
-//     );
+  useSettings();
+  endTime = findEndTime(settings.interval, true);
+  let replace = "";
+  if (endTime !== undefined) {
+    replace = endTime.format(settings.timeFormat);
+  }
 
-//     document.querySelector(".main").innerHTML = compileTemplate(
-//       "<div class='blur'><h1 style='color: red;'>{{timeupText}}</h1><div><ul><li>{{dayOfWeek}}</li><li>Item 2</li></ul></div><p>Ends at {endTime}</p></div>",
-//       settings
-//     );
-
-//     //document.querySelector(".main").textContent = "aasssdfsdfsd";
-//     timerTick();
-//   });
+  timerTick();
+});
 
 function compileTemplate(source, data) {
   var template = Handlebars.compile(source);

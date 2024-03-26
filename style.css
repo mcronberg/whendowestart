@@ -21,12 +21,6 @@ html {
   grid-template-rows: 50px 1fr 50px;
 }
 
-.grid-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;  
-  padding: 10px;
-}
 
 .header {
   display: flex;
@@ -40,50 +34,39 @@ html {
   text-align: center;
 }
 
+.footerText {   
+  text-align: center;
+}
+
 .burger-menu-div {
   /* If you need the burger menu to be on the extreme right */
   margin-left: auto;
 }
 
-/* Ensure the burger menu icon is aligned correctly */
-.burger-menu {
-  font-size: 24px; /* Adjust size as needed */
-}
 
 .burger-menu {
-    cursor: pointer;
-  }
-
-  .main {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;  /* flex-start, center, flex-end */
-    align-items: flex-start; /* flex-start, center, flex-end */
-    height: 100%; /* This ensures the div takes up the full height of its parent */    
-    margin: 200px 0px 0px 200px;
-  }
-
-  .blur{
-  border-radius: 20px;  
-  background: rgba(211, 211, 211, 0.3);   
-  backdrop-filter: blur(10px);  
-  padding: 20px;
+  font-size: 14px; 
+  cursor: pointer;
 }
 
-
-/* #settings-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-} */
-
-#settings-form label {
-  grid-column: 1;
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* flex-start, center, flex-end */
+  align-items: center; /* flex-start, center, flex-end */
+  height: 100%; /* This ensures the div takes up the full height of its parent */    
+  margin: 0px 0px 0px 0px;
 }
 
-#settings-form input {
-  grid-column: 2;
+.blur{
+
+border-radius: 20px;  
+background: rgba(211, 211, 211, 0.3);   
+backdrop-filter: blur(10px);  
+padding: 20px;
 }
+
+/* 
 
 .tab-content {
   display: none;
@@ -112,11 +95,12 @@ html {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-}
+} */
 
-#submitSection {
+/* #submitSection {
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center; /* This will vertically center align the items if needed */
+  align-items: center; 
 }
+ */
