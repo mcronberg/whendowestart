@@ -7,8 +7,10 @@
 
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.snow.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css" />
+    <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
   </head>
+
   <body>
     <div class="background"></div>
     <div class="grid-container" style="visibility: hidden">
@@ -18,139 +20,104 @@
           <i class="fas fa-bars burger-menu"></i>
         </div>
       </div>
-      <div class="main"></div>
+      <div class="main"><div></div></div>
       <div class="grid-item top-left footer footerText"><span></span></div>
     </div>
 
     <dialog id="settings-dialog">
-      <div class="tabs">
-        <button class="tab-link" data-tab="tab-timer">Timer</button>
-        <button class="tab-link" data-tab="tab-background">Background</button>
-        <button class="tab-link" data-tab="tab-headerfooter">Header/Footer</button>
-        <button class="tab-link" data-tab="tab-textformat">Text format</button>
-      </div>
-
       <form id="settings-form">
-        <div id="tab-timer" class="tab-content">
-          <table>
-            <tr>
-              <td>
-                <label for="interval">Interval in minutes or time:</label>
-              </td>
-              <td>
-                <input type="text" id="interval" name="interval" min="1" required />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label for="timeupText">Time's Up Text:</label>
-              </td>
-              <td>
-                <input type="text" id="timeupText" name="timeupText" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label for="mainText">Text:</label>
-              </td>
-              <td>
-                <div id="mainText" name="mainText" style="height: 600px; width: 600px"></div>
-              </td>
-            </tr>
-          </table>
+        <div class="form-group">
+          <label for="interval">Interval in minutes or time:</label>
+          <input type="text" id="interval" name="interval" min="1" required />
+        </div>
+        <div class="form-group">
+          <label for="minuteRoundUp">Minute Round Up</label>
+          <input type="checkbox" id="minuteRoundUp" name="minuteRoundUp" />
+        </div>
+        <div class="form-group">
+          <label for="culture">Culture:</label>
+          <input type="text" id="culture" name="culture" />
+        </div>
+        <div class="form-group">
+          <label for="titleText">Title:</label>
+          <input type="text" id="titleText" name="titleText" />
+        </div>
+        <div class="form-group" id="editor">
+          <label for="mainText">Text:</label>
+          <textarea id="mainText" name="mainText"></textarea>
         </div>
 
-        <!-- <div id="tab-headerfooter" class="tab-content">
-          <label for="headerText">Header Text:</label>
-          <input type="text" id="headerText" name="headerText" />
+        <div class="form-group">
+          <label for="mainTextHAlign">Main Text Horizontal Alignment:</label>
+          <input type="text" id="mainTextHAlign" name="mainTextHAlign" />
+        </div>
 
-          <label for="headerFontSize">Header Font Size:</label>
-          <input type="text" id="headerFontSize" name="headerFontSize" />
+        <div class="form-group">
+          <label for="mainTextVAlign">Main Text Vertical Alignment:</label>
+          <input type="text" id="mainTextVAlign" name="mainTextVAlign" />
+        </div>
 
-          <label for="headerColor">Header Color:</label>
-          <input type="color" id="headerColor" name="headerColor" />
+        <div class="form-group">
+          <label for="backgroundImage">Background Image:</label>
+          <input type="text" id="backgroundImage" name="backgroundImage" />
+        </div>
 
+        <div class="form-group">
+          <label for="backgroundColor">Background Color:</label>
+          <input type="text" id="backgroundColor" name="backgroundColor" />
+        </div>
+
+        <div class="form-group">
+          <label for="addBlur">Add Blur:</label>
+          <input type="checkbox" id="addBlur" name="addBlur" />
+        </div>
+        <div class="form-group">
+          <label for="fontFamily">Font Family:</label>
+          <input type="text" id="fontFamily" name="fontFamily" />
+        </div>
+        <div class="form-group">
           <label for="footerText">Footer Text:</label>
           <input type="text" id="footerText" name="footerText" />
+        </div>
 
+        <div class="form-group">
           <label for="footerFontSize">Footer Font Size:</label>
           <input type="text" id="footerFontSize" name="footerFontSize" />
+        </div>
 
+        <div class="form-group">
           <label for="footerColor">Footer Color:</label>
-          <input type="color" id="footerColor" name="footerColor" />
+          <input type="text" id="footerColor" name="footerColor" />
+        </div>
 
-          <label for="footerHAlign">Footer Horizontal Align:</label>
+        <div class="form-group">
+          <label for="footerHAlign">Footer align</label>
           <input type="text" id="footerHAlign" name="footerHAlign" />
         </div>
-
-        <div id="tab-textformat" class="tab-content">
-          <label for="fontFamily">Font Family:</label>
-          <input type="text" id="fontFamily" name="fontFamily" placeholder="Verdana" />
-
-          <label for="row1FontSize">Row 1 Font Size:</label>
-          <input type="text" id="row1FontSize" name="row1FontSize" placeholder="32px" />
-
-          <label for="row2FontSize">Row 2 Font Size:</label>
-          <input type="text" id="row2FontSize" name="row2FontSize" placeholder="32px" />
-
-          <label for="row3FontSize">Row 3 Font Size:</label>
-          <input type="text" id="row3FontSize" name="row3FontSize" placeholder="32px" />
-
-          <label for="row4FontSize">Row 4 Font Size:</label>
-          <input type="text" id="row4FontSize" name="row4FontSize" placeholder="32px" />
-
-          <label for="row1Color">Row 1 Color:</label>
-          <input type="color" id="row1Color" name="row1Color" placeholder="#000000" />
-
-          <label for="row2Color">Row 2 Color:</label>
-          <input type="color" id="row2Color" name="row2Color" placeholder="#000000" />
-
-          <label for="row3Color">Row 3 Color:</label>
-          <input type="color" id="row3Color" name="row3Color" placeholder="#000000" />
-
-          <label for="row4Color">Row 4 Color:</label>
-          <input type="color" id="row4Color" name="row4Color" placeholder="#000000" />
-
-          <label for="row1VAlign">Row 1 Vertical Align:</label>
-          <input type="text" id="row1VAlign" name="row1VAlign" placeholder="center" />
-
-          <label for="row2VAlign">Row 2 Vertical Align:</label>
-          <input type="text" id="row2VAlign" name="row2VAlign" placeholder="center" />
-
-          <label for="row3VAlign">Row 3 Vertical Align:</label>
-          <input type="text" id="row3VAlign" name="row3VAlign" placeholder="center" />
-
-          <label for="row4VAlign">Row 4 Vertical Align:</label>
-          <input type="text" id="row4VAlign" name="row4VAlign" placeholder="center" />
-
-          <label for="row1HAlign">Row 1 Horizontal Align:</label>
-          <input type="text" id="row1HAlign" name="row1HAlign" placeholder="center" />
-
-          <label for="row2HAlign">Row 2 Horizontal Align:</label>
-          <input type="text" id="row2HAlign" name="row2HAlign" placeholder="center" />
-
-          <label for="row3HAlign">Row 3 Horizontal Align:</label>
-          <input type="text" id="row3HAlign" name="row3HAlign" placeholder="center" />
-
-          <label for="row4HAlign">Row 4 Horizontal Align:</label>
-          <input type="text" id="row4HAlign" name="row4HAlign" placeholder="center" />
+        <div class="form-group">
+          <label for="headerText">Header Text:</label>
+          <input type="text" id="headerText" name="headerText" />
         </div>
 
-        <div id="tab-background" class="tab-content">
-          <label for="backgroundImage">Background Image URL:</label>
-          <input type="text" id="backgroundImage" name="backgroundImage" placeholder="Enter image URL" />
+        <div class="form-group">
+          <label for="headerFontSize">Header Font Size:</label>
+          <input type="text" id="headerFontSize" name="headerFontSize" />
+        </div>
 
-          <label for="backgroundColor">Background Color:</label>
-          <input type="text" id="backgroundColor" name="backgroundColor" placeholder="#FFFFFF" value="white" />
-        </div> -->
-        <!-- 
-        <div id="submitSection">
-          <a id="dynamicLink" href="#" target="_blank">Save/test settings</a>
-          <input type="submit" value="Save values and start" />
-        </div> -->
+        <div class="form-group">
+          <label for="headerColor">Header Color:</label>
+          <input type="text" id="headerColor" name="headerColor" />
+        </div>
+
+        <div class="form-group">
+          <label for="menuColor">Menu Color:</label>
+          <input type="text" id="menuColor" name="menuColor" />
+        </div>
+
+        <button type="submit">Save and start</button>
       </form>
     </dialog>
-
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.8/handlebars.min.js"
       integrity="sha512-E1dSFxg+wsfJ4HKjutk/WaCzK7S2wv1POn1RRPGh8ZK+ag9l244Vqxji3r6wgz9YBf6+vhQEYJZpSjqWFPg9gg=="
@@ -163,7 +130,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.4/dist/quill.js"></script>
+
     <script type="module" src="app.js"></script>
   </body>
 </html>

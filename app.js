@@ -19,92 +19,54 @@ window.onload = function () {
   settings.calculated.restServiceResponse = {};
   settings.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
   if (settings.urlToRestService !== undefined && settings.urlToRestService !== "") {
+    console.log("fetching data from rest service " + settings.urlToRestService);
     {
       fetch(settings.urlToRestService)
         .then((response) => response.json())
         .then((data) => {
           settings.calculated.restServiceResponse = data;
+          console.log("rest service response", settings.calculated.restServiceResponse);
         });
     }
   }
   updateUISettings();
   updateUI();
   timerTick();
-
-  const tabs = document.querySelectorAll(".tab-link");
-  const tabContents = document.querySelectorAll(".tab-content");
-
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", function () {
-      const target = document.getElementById(this.getAttribute("data-tab"));
-
-      tabContents.forEach((tc) => {
-        tc.classList.remove("active");
-      });
-
-      tabs.forEach((t) => {
-        t.classList.remove("active");
-      });
-
-      target.classList.add("active");
-      this.classList.add("active");
-    });
-  });
-
-  if (tabs.length > 0) {
-    tabs[0].click();
-  }
-  const toolbarOptions = [
-    ["bold", "italic", "underline", "strike"], // toggled buttons
-    ["link"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-    ["clean"],
-  ];
-  const quill = new Quill("#mainText", {
-    modules: {
-      toolbar: toolbarOptions,
-    },
-    theme: "snow",
-  });
-
-  // const settingsDialog = document.querySelector("#settings-dialog");
-  // const dynamicLink = document.getElementById("dynamicLink");
-  // const inputs = settingsDialog.querySelectorAll(
-  //   "input[type='text'], input[type='number'], input[type='color']"
-  // );
-
-  // const updateLink = () => {
-  //   const params = new URLSearchParams();
-  //   inputs.forEach((input) => {
-  //     // Only add parameter if input has a value
-  //     if (input.value) {
-  //       params.append(input.name, input.value);
-  //     }
-  //   });
-  //   dynamicLink.href = `${settings.baseUrl}?${params.toString()}&start=1`;
-  // };
-
-  // // Attach the event listener to each input field
-  // inputs.forEach((input) => input.addEventListener("change", updateLink));
-
-  // // Initial update in case there are any preset values
-  // updateLink();
-
-  // for (let key in settings) {
-  //   let input = document.querySelector(`#settings-form [name="${key}"]`);
-  //   if (input) {
-  //     input.value = settings[key];
-  //   }
-  // }
-
-  // const submitButton = document.querySelector(
-  //   '#settings-form input[type="submit"]'
-  // );
-  // // Trigger a click event on the submit button
-  // submitButton.click();
 };
+// const settingsDialog = document.querySelector("#settings-dialog");
+// const dynamicLink = document.getElementById("dynamicLink");
+// const inputs = settingsDialog.querySelectorAll(
+//   "input[type='text'], input[type='number'], input[type='color']"
+// );
+
+// const updateLink = () => {
+//   const params = new URLSearchParams();
+//   inputs.forEach((input) => {
+//     // Only add parameter if input has a value
+//     if (input.value) {
+//       params.append(input.name, input.value);
+//     }
+//   });
+//   dynamicLink.href = `${settings.baseUrl}?${params.toString()}&start=1`;
+// };
+
+// // Attach the event listener to each input field
+// inputs.forEach((input) => input.addEventListener("change", updateLink));
+
+// // Initial update in case there are any preset values
+// updateLink();
+
+// for (let key in settings) {
+//   let input = document.querySelector(`#settings-form [name="${key}"]`);
+//   if (input) {
+//     input.value = settings[key];
+//   }
+// }
+
+// const submitButton = document.querySelector(
+//   '#settings-form button[type="submit"]'
+// );
+// submitButton.click();
 
 function updateUISettings() {
   moment.locale(settings.culture);
@@ -114,21 +76,29 @@ function updateUISettings() {
   document.querySelector(".background").style.backgroundColor = settings.backgroundColor;
   document.querySelector(".background").style.backgroundImage = `url(${settings.backgroundImage})`;
 
-  document.querySelector(".footerText span").textContent = settings.footerText;
-  document.querySelector(".headerText span").textContent = settings.headerText;
+  document.querySelector(".footerText span").innerHTML = settings.footerText;
+  document.querySelector(".headerText span").innerHTML = settings.headerText;
 
   document.querySelector(".footerText").style.fontSize = settings.footerFontSize;
   document.querySelector(".headerText").style.fontSize = settings.headerFontSize;
 
-  document.querySelector(".footerText").style.color = settings.footerColor;
-  document.querySelector(".headerText").style.color = settings.headerColor;
+  document.querySelector(".footerText span").style.color = settings.footerColor;
+  document.querySelector(".footerText span").style.margin = "100px";
+
+  document.querySelector(".headerText span").style.color = settings.headerColor;
 
   document.querySelector(".footer").style.justifyContent = settings.footerHAlign;
 
   document.querySelector(".main").style.justifyContent = settings.mainHAlign;
   document.querySelector(".main").style.alignItems = settings.mainVAlign;
+  document.querySelector(".main").style.color = settings.mainColor;
+  document.querySelector(".main").style.fontSize = settings.mainFontSize;
 
   document.querySelector(".burger-menu-div").style.color = settings.menuColor;
+
+  if (settings.addBlur) {
+    document.querySelector(".main div").classList.add("blur");
+  }
 }
 
 function timerTick() {
@@ -153,10 +123,12 @@ function timerTick() {
       const diff = moment().startOf("day").add(duration);
       settings.calculated.diff = diff;
 
-      settings.calculated.mainText = compileTemplate(settings.mainText, settings);
+      settings.calculated.mainText = marked.parse(compileTemplate(settings.mainText, settings));
       settings.calculated.titleText = compileTemplate(settings.titleText, settings);
-      settings.calculated.headerText = compileTemplate(settings.headerText, settings);
-      settings.calculated.footerText = compileTemplate(settings.footerText, settings);
+      settings.calculated.headerText = marked.parse(compileTemplate(settings.headerText, settings));
+      settings.calculated.footerText = marked.parse(compileTemplate(settings.footerText, settings));
+      settings.calculated.soon = settings.calculated.diffInMinutes < 1;
+      settings.calculated.expired = settings.calculated.diffInSeconds < 2;
 
       updateUI();
 
@@ -170,9 +142,9 @@ function timerTick() {
 
 function updateUI() {
   document.title = settings.calculated.titleText;
-  document.querySelector(".main").innerHTML = settings.calculated.mainText;
-  document.querySelector(".headerText").innerHTML = settings.calculated.headerText;
-  document.querySelector(".footerText").innerHTML = settings.calculated.footerText;
+  document.querySelector(".main div").innerHTML = settings.calculated.mainText;
+  document.querySelector(".headerText span").innerHTML = settings.calculated.headerText;
+  document.querySelector(".footerText span").innerHTML = settings.calculated.footerText;
 }
 
 function findEndTime(interval, rounded) {
@@ -195,33 +167,37 @@ const burgerMenu = document.querySelector(".burger-menu");
 burgerMenu.addEventListener("click", () => {
   for (let key in settings) {
     let input = document.querySelector(`#settings-form [name="${key}"]`);
+
     if (input) {
-      console.log(key);
-      input.value = settings[key];
+      if (input.type === "checkbox") {
+        input.checked = settings[key];
+      } else {
+        input.value = settings[key];
+      }
     }
   }
 
   dialog.showModal();
 });
-
 document.querySelector("#settings-form").addEventListener("submit", function (event) {
   event.preventDefault();
 
   for (let key in settings) {
     let input = document.querySelector(`#settings-form [name="${key}"]`);
     if (input) {
-      settings[key] = input.value;
+      if (input.type === "checkbox") {
+        settings[key] = input.checked;
+      } else if (input.type === "textarea") {
+        settings[key] = input.value;
+      } else {
+        settings[key] = input.value;
+      }
     }
   }
 
-  useSettings();
-  endTime = findEndTime(settings.interval, true);
-  let replace = "";
-  if (endTime !== undefined) {
-    replace = endTime.format(settings.timeFormat);
-  }
-
+  updateUISettings();
   timerTick();
+  document.querySelector("#settings-dialog").close();
 });
 
 function compileTemplate(source, data) {
@@ -234,7 +210,7 @@ Handlebars.registerHelper("numberAsBinaryString", function (value) {
 });
 
 Handlebars.registerHelper("numberAsHexadecimalString", function (value) {
-  return Number(value).toString(16);
+  return "0x" + Number(value).toString(16).toUpperCase();
 });
 
 Handlebars.registerHelper("numberAsOctalString", function (value) {
@@ -251,4 +227,8 @@ Handlebars.registerHelper("getProperty", function (object, property) {
 
 Handlebars.registerHelper("format", function (value, format) {
   return moment(value).format(format);
+});
+
+Handlebars.registerHelper("add", function (n1, n2) {
+  return n1 + n2;
 });

@@ -49,7 +49,7 @@ html {
   cursor: pointer;
 }
 
-.main {
+.main div {
   display: flex;
   flex-direction: column;
   justify-content: center;  /* flex-start, center, flex-end */
@@ -66,41 +66,33 @@ backdrop-filter: blur(10px);
 padding: 20px;
 }
 
-/* 
-
-.tab-content {
-  display: none;
+#settings-form div {
+  display: block;
+  margin-bottom: 1em; 
 }
 
-.tab-content.active {
+.form-group label,
+.form-group input {
   display: block;
 }
 
-.tabs {
-  margin-bottom: 20px;
+#editor textarea {
+  width: 500px;
+  height: 150px;
 }
 
-.tab-link {
-  background: #ddd;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
+.main div {
+  text-shadow: 1px 1px 15px yellow;
+  letter-spacing: 5px;
 }
 
-.tab-link.active {
-  background: #aaa;
+.footer {
+  text-shadow: 1px 1px 15px yellow;
+  letter-spacing: 5px;
 }
 
-.tab-content.active {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-} */
-
-/* #submitSection {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center; 
+.header {
+  text-shadow: 1px 1px 15px yellow;
+  letter-spacing: 5px;
 }
- */
+
