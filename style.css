@@ -2,6 +2,7 @@ body,
 html {
   height: 100%;
   margin: 0;
+  overflow: hidden;
 }
 
 .background {
@@ -25,8 +26,8 @@ html {
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center; /* Centers items vertically in the container */
-  padding: 0 20px; /* Add some padding on both sides */
+  align-items: center; 
+  padding: 0 20px; 
 }
 
 .headerText {
@@ -38,8 +39,7 @@ html {
   text-align: center;
 }
 
-.burger-menu-div {
-  /* If you need the burger menu to be on the extreme right */
+.burger-menu-div {  
   margin-left: auto;
 }
 
@@ -52,18 +52,10 @@ html {
 .main div {
   display: flex;
   flex-direction: column;
-  justify-content: center;  /* flex-start, center, flex-end */
-  align-items: center; /* flex-start, center, flex-end */
-  height: 100%; /* This ensures the div takes up the full height of its parent */    
+  justify-content: center;  
+  align-items: center; 
+  height: 100%; 
   margin: 0px 0px 0px 0px;
-}
-
-.blur{
-
-border-radius: 20px;  
-background: rgba(211, 211, 211, 0.3);   
-backdrop-filter: blur(10px);  
-padding: 20px;
 }
 
 #settings-form div {
@@ -76,23 +68,7 @@ padding: 20px;
   display: block;
 }
 
-#editor textarea {
+textarea {
   width: 500px;
   height: 150px;
 }
-
-.main div {
-  text-shadow: 1px 1px 15px yellow;
-  letter-spacing: 5px;
-}
-
-.footer {
-  text-shadow: 1px 1px 15px yellow;
-  letter-spacing: 5px;
-}
-
-.header {
-  text-shadow: 1px 1px 15px yellow;
-  letter-spacing: 5px;
-}
-

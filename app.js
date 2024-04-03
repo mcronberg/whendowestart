@@ -32,7 +32,45 @@ window.onload = function () {
   updateUISettings();
   updateUI();
   timerTick();
+
+  function createForm(settings) {
+    const form = document.createElement("form");
+
+    for (let setting in settings) {
+      const div = document.createElement("div");
+      div.className = "form-group";
+
+      const label = document.createElement("label");
+      label.htmlFor = setting;
+      label.textContent = `${setting}:`;
+
+      let input;
+      if (setting === "endTime" || setting === "calculated") continue;
+
+      if (setting === "mainText" || setting === "headerText" || setting === "footerText") {
+        input = document.createElement("textarea");
+      } else {
+        input = document.createElement("input");
+        input.type = "text";
+        input.min = "1";
+      }
+
+      input.id = setting;
+      input.name = setting;
+
+      div.appendChild(label);
+      div.appendChild(input);
+
+      form.appendChild(div);
+    }
+
+    return form;
+  }
+
+  const form = createForm(settings);
+  document.querySelector("#settings-form").appendChild(form);
 };
+
 // const settingsDialog = document.querySelector("#settings-dialog");
 // const dynamicLink = document.getElementById("dynamicLink");
 // const inputs = settingsDialog.querySelectorAll(
@@ -49,24 +87,6 @@ window.onload = function () {
 //   });
 //   dynamicLink.href = `${settings.baseUrl}?${params.toString()}&start=1`;
 // };
-
-// // Attach the event listener to each input field
-// inputs.forEach((input) => input.addEventListener("change", updateLink));
-
-// // Initial update in case there are any preset values
-// updateLink();
-
-// for (let key in settings) {
-//   let input = document.querySelector(`#settings-form [name="${key}"]`);
-//   if (input) {
-//     input.value = settings[key];
-//   }
-// }
-
-// const submitButton = document.querySelector(
-//   '#settings-form button[type="submit"]'
-// );
-// submitButton.click();
 
 function updateUISettings() {
   moment.locale(settings.culture);
@@ -88,11 +108,14 @@ function updateUISettings() {
   document.querySelector(".headerText span").style.color = settings.headerColor;
 
   document.querySelector(".footer").style.justifyContent = settings.footerHAlign;
+  document.querySelector(".footer").style.textShadow = settings.footerTextShadow;
+  document.querySelector(".header").style.textShadow = settings.headerTextShadow;
 
   document.querySelector(".main").style.justifyContent = settings.mainHAlign;
   document.querySelector(".main").style.alignItems = settings.mainVAlign;
   document.querySelector(".main").style.color = settings.mainColor;
   document.querySelector(".main").style.fontSize = settings.mainFontSize;
+  document.querySelector(".main").style.textShadow = settings.mainTextShadow;
 
   document.querySelector(".burger-menu-div").style.color = settings.menuColor;
 
@@ -179,16 +202,14 @@ burgerMenu.addEventListener("click", () => {
 
   dialog.showModal();
 });
-document.querySelector("#settings-form").addEventListener("submit", function (event) {
-  event.preventDefault();
-
+document.querySelector("#submitDialog").addEventListener("click", function (event) {
   for (let key in settings) {
     let input = document.querySelector(`#settings-form [name="${key}"]`);
     if (input) {
-      if (input.type === "checkbox") {
-        settings[key] = input.checked;
-      } else if (input.type === "textarea") {
-        settings[key] = input.value;
+      if (input.value.toLowerCase() === "true") {
+        settings[key] = true;
+      } else if (input.value.toLowerCase() === "false") {
+        settings[key] = false;
       } else {
         settings[key] = input.value;
       }
@@ -198,6 +219,18 @@ document.querySelector("#settings-form").addEventListener("submit", function (ev
   updateUISettings();
   timerTick();
   document.querySelector("#settings-dialog").close();
+});
+
+document.querySelector("#link").addEventListener("click", function (event) {
+  let inputs = document.querySelectorAll("#settings-form input, #settings-form textarea");
+  const params = new URLSearchParams();
+  inputs.forEach((input) => {
+    if (input.value) {
+      params.append(input.name, input.value);
+    }
+  });
+  let link = `${settings.baseUrl}?${params.toString()}&start=1`;
+  document.location.href = link;
 });
 
 function compileTemplate(source, data) {
