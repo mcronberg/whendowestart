@@ -246,6 +246,7 @@ function log(txt){
   }
 }
 
+
 Handlebars.registerHelper("numberAsBinaryString", function (value) {
   return Number(value).toString(2);
 });
