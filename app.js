@@ -17,7 +17,7 @@ window.onload = function () {
   }
   settings.calculated = {};
   settings.calculated.restServiceResponse = {};
-  settings.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
+  settings.calculated.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
   if (settings.urlToRestService !== undefined && settings.urlToRestService !== "") {
     console.log("fetching data from rest service " + settings.urlToRestService);
     {
@@ -45,7 +45,7 @@ window.onload = function () {
       label.textContent = `${setting}:`;
 
       let input;
-      if (setting === "endTime" || setting === "calculated") continue;
+      if (setting === "calculated") continue;
 
       if (setting === "mainText" || setting === "headerText" || setting === "footerText" || setting === "titleText") {
         input = document.createElement("textarea");
@@ -110,7 +110,7 @@ function updateUISettings() {
 function timerTick() {
   let visible = false;
   const countdown = setInterval(() => {
-    if (moment().isAfter(settings.endTime)) {
+    if (moment().isAfter(settings.calculated.endTime)) {
       clearInterval(countdown);
       settings.timeupTextValue = settings.timeupText;
     } else {
@@ -122,9 +122,9 @@ function timerTick() {
       settings.calculated.time = moment().format(settings.timeFormat);
       
 
-      settings.calculated.diffInMilliseconds = settings.endTime.diff(moment());
-      settings.calculated.diffInMinutes = settings.endTime.diff(moment(), "minutes");
-      settings.calculated.diffInSeconds = settings.endTime.diff(moment(), "seconds");
+      settings.calculated.diffInMilliseconds = settings.calculated.endTime.diff(moment());
+      settings.calculated.diffInMinutes = settings.calculated.endTime.diff(moment(), "minutes");
+      settings.calculated.diffInSeconds = settings.calculated.endTime.diff(moment(), "seconds");
       const duration = moment.duration(settings.calculated.diffInMilliseconds);
       const diff = moment().startOf("day").add(duration);
       settings.calculated.diff = diff;
