@@ -1,6 +1,6 @@
 export const defaultSettings = {
-  baseUrl: "https://www.whendowestart.com", // baseUrl: "http://127.0.0.1:5500/",
-  culture: "en-US",
+  
+  
   interval: 10,
   minuteRoundUp: true,
   mainText: "# Header \r\n\r\n Text \r\n\r\n *we start again {{#if calculated.soon}}in a just a bit{{else}}at {{format calculated.endTime 'h:mm A'}}{{/if}}*",
@@ -29,5 +29,7 @@ export const defaultSettings = {
   backgroundColor: "white",
 
   fontFamily: "Verdana",
+  culture: "en-US",
+  baseUrl: "https://www.whendowestart.com", // baseUrl: "http://127.0.0.1:5500/"
   debug: true
 };
