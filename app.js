@@ -240,9 +240,9 @@ function logGroupEnd(){
   }
 }
 
-function log(txt){
+function log(o){
   if(settings.debug){
-    console.log(moment().format('HH:mm:ss') + " " + txt);
+    console.log(moment().format('HH:mm:ss'), o);
   }
 }
 
