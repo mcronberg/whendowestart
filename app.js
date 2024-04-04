@@ -135,7 +135,7 @@ function timerTick() {
       settings.calculated.footerText = marked.parse(compileTemplate(settings.footerText, settings));
       settings.calculated.soon = settings.calculated.diffInMinutes < 1;
       settings.calculated.expired = settings.calculated.diffInSeconds < 2;
-
+console.log(settings);
       updateUI();
 
       if (!visible) {
