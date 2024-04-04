@@ -3,8 +3,8 @@ import { defaultSettings } from "./defaultSettings.js";
 let settings = defaultSettings;
 
 window.onload = function () {
-  if(settings.debug)
-    console.groupCollapsed("onload");
+  
+  logGroup("onload");
   
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -32,15 +32,14 @@ window.onload = function () {
         });
     }
   }
-  if(settings.debug)
-    console.log(settings);
-  
-  if(settings.debug)
-    console.groupEnd();
+  log(settings);
+ 
   updateUISettings();
   updateUI();
   timerTick();
 
+  logGroupEnd();
+  
   function createForm(settings) {
     const form = document.createElement("form");
 
@@ -143,7 +142,7 @@ function timerTick() {
       settings.calculated.footerText = marked.parse(compileTemplate(settings.footerText, settings));
       settings.calculated.soon = settings.calculated.diffInMinutes < 1;
       settings.calculated.expired = settings.calculated.diffInSeconds < 2;
-console.log(settings);
+
       updateUI();
 
       if (!visible) {
@@ -227,6 +226,24 @@ document.querySelector("#link").addEventListener("click", function (event) {
 function compileTemplate(source, data) {
   var template = Handlebars.compile(source);
   return template(data);
+}
+
+function logGroup(label){
+  if(settings.debug){
+    console.groupCollapsed(label);
+  }
+}
+
+function logGroupEnd(){
+  if(settings.debug){
+    console.groupEnd();
+  }
+}
+
+function log(txt){
+  if(settings.debug){
+    console.log(moment().format('HH:mm:ss') + " " + txt));
+  }
 }
 
 Handlebars.registerHelper("numberAsBinaryString", function (value) {
