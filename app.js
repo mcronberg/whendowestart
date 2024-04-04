@@ -47,7 +47,7 @@ window.onload = function () {
       let input;
       if (setting === "endTime" || setting === "calculated") continue;
 
-      if (setting === "mainText" || setting === "headerText" || setting === "footerText") {
+      if (setting === "mainText" || setting === "headerText" || setting === "footerText" || setting === "titleText") {
         input = document.createElement("textarea");
       } else {
         input = document.createElement("input");
