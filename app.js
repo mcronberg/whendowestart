@@ -242,7 +242,7 @@ function logGroupEnd(){
 
 function log(txt){
   if(settings.debug){
-    console.log(moment().format('HH:mm:ss') + " " + txt));
+    console.log(moment().format('HH:mm:ss') + " " + txt);
   }
 }
 
