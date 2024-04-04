@@ -3,7 +3,8 @@ import { defaultSettings } from "./defaultSettings.js";
 let settings = defaultSettings;
 
 window.onload = function () {
-  console.log("onload");
+  if(settings.debug)
+    console.groupCollapsed("onload");
   
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -31,7 +32,11 @@ window.onload = function () {
         });
     }
   }
-  console.log(settings);
+  if(settings.debug)
+    console.log(settings);
+  
+  if(settings.debug)
+    console.groupEnd();
   updateUISettings();
   updateUI();
   timerTick();
