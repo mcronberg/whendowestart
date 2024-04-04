@@ -3,6 +3,8 @@ import { defaultSettings } from "./defaultSettings.js";
 let settings = defaultSettings;
 
 window.onload = function () {
+  console.log("onload");
+  console.log(settings);
   const urlParams = new URLSearchParams(window.location.search);
 
   for (let param of urlParams) {
