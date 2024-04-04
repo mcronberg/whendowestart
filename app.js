@@ -3,9 +3,9 @@ import { defaultSettings } from "./defaultSettings.js";
 let settings = defaultSettings;
 
 window.onload = function () {
-  
   logGroup("onload");
-  
+
+  //document.querySelector(".grid-container").style.visibility = "hidden";
   const urlParams = new URLSearchParams(window.location.search);
 
   for (let param of urlParams) {
@@ -32,14 +32,19 @@ window.onload = function () {
         });
     }
   }
+
+  if (settings.debug) {
+    settings.baseUrl = settings.debugBaseUrl;
+  }
+
   log(settings);
- 
+
   updateUISettings();
   updateUI();
-  timerTick();
 
+  //document.querySelector(".grid-container").style.visibility = "visible";
   logGroupEnd();
-  
+
   function createForm(settings) {
     const form = document.createElement("form");
 
@@ -52,7 +57,7 @@ window.onload = function () {
       label.textContent = `${setting}:`;
 
       let input;
-      if (setting === "calculated") continue;
+      if (setting === "calculated" || setting.indexOf("debug") > -1) continue;
 
       if (setting === "mainText" || setting === "headerText" || setting === "footerText" || setting === "titleText") {
         input = document.createElement("textarea");
@@ -79,6 +84,7 @@ window.onload = function () {
 };
 
 function updateUISettings() {
+  logGroup("updateUISettings");
   moment.locale(settings.culture);
 
   document.body.style.fontFamily = settings.fontFamily;
@@ -109,51 +115,34 @@ function updateUISettings() {
 
   document.querySelector(".burger-menu-div").style.color = settings.menuColor;
 
-  if (settings.addBlur) {
-    document.querySelector(".main div").classList.add("blur");
-  }
+  logGroupEnd();
 }
 
-function timerTick() {
-  let visible = false;
-  const countdown = setInterval(() => {
-    if (moment().isAfter(settings.calculated.endTime)) {
-      clearInterval(countdown);
-      settings.timeupTextValue = settings.timeupText;
-    } else {
-      settings.calculated.currentTime = moment();
-      settings.calculated.dayOfWeek = moment().format("dddd");
-      settings.calculated.year = moment().format("YYYY");
-      settings.calculated.month = moment().format("MMMM");
-      settings.calculated.day = moment().format("DD");
-      settings.calculated.time = moment().format(settings.timeFormat);
-      
+setInterval(() => {
+  settings.calculated.dayOfWeek = moment().format("dddd");
+  settings.calculated.year = moment().format("YYYY");
+  settings.calculated.month = moment().format("MMMM");
+  settings.calculated.day = moment().format("DD");
+  settings.calculated.time = moment().format(settings.timeFormat);
 
-      settings.calculated.diffInMilliseconds = settings.calculated.endTime.diff(moment());
-      settings.calculated.diffInMinutes = settings.calculated.endTime.diff(moment(), "minutes");
-      settings.calculated.diffInSeconds = settings.calculated.endTime.diff(moment(), "seconds");
-      const duration = moment.duration(settings.calculated.diffInMilliseconds);
-      const diff = moment().startOf("day").add(duration);
-      settings.calculated.diff = diff;
+  settings.calculated.diffInMilliseconds = settings.calculated.endTime.diff(moment());
+  settings.calculated.diffInMinutes = settings.calculated.endTime.diff(moment(), "minutes");
+  settings.calculated.diffInSeconds = settings.calculated.endTime.diff(moment(), "seconds");
+  const duration = moment.duration(settings.calculated.diffInMilliseconds);
+  const diff = moment().startOf("day").add(duration);
+  settings.calculated.diff = diff;
 
-      settings.calculated.mainText = marked.parse(compileTemplate(settings.mainText, settings));
-      settings.calculated.titleText = compileTemplate(settings.titleText, settings);
-      settings.calculated.headerText = marked.parse(compileTemplate(settings.headerText, settings));
-      settings.calculated.footerText = marked.parse(compileTemplate(settings.footerText, settings));
-      settings.calculated.soon = settings.calculated.diffInMinutes < 1;
-      settings.calculated.expired = settings.calculated.diffInSeconds < 2;
+  settings.calculated.mainText = marked.parse(compileTemplate(settings.mainText, settings));
+  settings.calculated.titleText = compileTemplate(settings.titleText, settings);
+  settings.calculated.headerText = marked.parse(compileTemplate(settings.headerText, settings));
+  settings.calculated.footerText = marked.parse(compileTemplate(settings.footerText, settings));
+  settings.calculated.soon = settings.calculated.diffInSeconds < 5;
+  settings.calculated.expired = settings.calculated.diffInSeconds < 1;
 
-      updateUI();
+  updateUI();
+}, 1000);
 
-      if (!visible) {
-        document.querySelector(".grid-container").style.visibility = "visible";
-        visible = true;
-      }
-    }
-  }, 1000);
-}
-
-function updateUI() {  
+function updateUI() {
   document.querySelector(".main div").innerHTML = settings.calculated.mainText;
   document.querySelector(".headerText span").innerHTML = settings.calculated.headerText;
   document.querySelector(".footerText span").innerHTML = settings.calculated.footerText;
@@ -176,23 +165,37 @@ function findEndTime(interval, rounded) {
 
 const dialog = document.querySelector("#settings-dialog");
 const burgerMenu = document.querySelector(".burger-menu");
+let burgerMenuIsActive = false;
 
 burgerMenu.addEventListener("click", () => {
+  logGroup("burgerMenu click");
+  burgerMenuIsActive = true;
   for (let key in settings) {
     let input = document.querySelector(`#settings-form [name="${key}"]`);
-
+    log(input);
     if (input) {
-      if (input.type === "checkbox") {
-        input.checked = settings[key];
-      } else {
-        input.value = settings[key];
-      }
+      input.value = settings[key];
     }
+  }
+  let firstInput = document.querySelector("#settings-form input");
+  if (firstInput) {
+    firstInput.focus();
+    firstInput.select();
   }
 
   dialog.showModal();
+  logGroupEnd();
 });
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter" && burgerMenuIsActive) {
+    document.getElementById("submitDialog").click();
+  }
+});
+
 document.querySelector("#submitDialog").addEventListener("click", function (event) {
+  logGroup("submitDialog click");
+
   for (let key in settings) {
     let input = document.querySelector(`#settings-form [name="${key}"]`);
     if (input) {
@@ -203,15 +206,51 @@ document.querySelector("#submitDialog").addEventListener("click", function (even
       } else {
         settings[key] = input.value;
       }
+      if (key === "interval") {
+        console.log("interval", isNaN(input.value));
+        if (!isNaN(input.value)) {
+          settings.calculated.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
+        } else {
+          // input.value is not a number, try to parse it as a time
+          let time = moment(input.value, "HH:mm");
+          if (time.isValid()) {
+            // input.value is a valid time, create a date object with the current date and the provided time
+            let date = moment().set({
+              hour: time.get("hour"),
+              minute: time.get("minute"),
+              second: 0,
+            });
+            settings.calculated.endTime = date;
+          } else {
+            input.focus();
+            input.select();
+            alert("Please enter a valid number or time in the interval field");
+            return;
+          }
+        }
+      }
     }
   }
-  settings.calculated.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
+
+  log(settings);
   updateUISettings();
-  timerTick();
+
   document.querySelector("#settings-dialog").close();
+  burgerMenuIsActive = false;
+  logGroupEnd();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("keydown", function (event) {
+    if (event.ctrlKey && event.key === "s") {
+      event.preventDefault();
+      document.querySelector(".burger-menu").click();
+    }
+  });
 });
 
 document.querySelector("#link").addEventListener("click", function (event) {
+  logGroup("link click");
   let inputs = document.querySelectorAll("#settings-form input, #settings-form textarea");
   const params = new URLSearchParams();
   inputs.forEach((input) => {
@@ -220,7 +259,10 @@ document.querySelector("#link").addEventListener("click", function (event) {
     }
   });
   let link = `${settings.baseUrl}?${params.toString()}&start=1`;
+  burgerMenuIsActive = false;
   document.location.href = link;
+  log(link);
+  logGroupEnd();
 });
 
 function compileTemplate(source, data) {
@@ -228,24 +270,23 @@ function compileTemplate(source, data) {
   return template(data);
 }
 
-function logGroup(label){
-  if(settings.debug){
-    console.groupCollapsed(label);
+function logGroup(label) {
+  if (settings.debug) {
+    console.groupCollapsed(moment().format("HH:mm:ss") + " " + label);
   }
 }
 
-function logGroupEnd(){
-  if(settings.debug){
+function logGroupEnd() {
+  if (settings.debug) {
     console.groupEnd();
   }
 }
 
-function log(o){
-  if(settings.debug){
-    console.log(moment().format('HH:mm:ss'), o);
+function log(o) {
+  if (settings.debug) {
+    console.log(o);
   }
 }
-
 
 Handlebars.registerHelper("numberAsBinaryString", function (value) {
   return Number(value).toString(2);
