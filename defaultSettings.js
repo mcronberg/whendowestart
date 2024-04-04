@@ -29,4 +29,5 @@ export const defaultSettings = {
   backgroundColor: "white",
 
   fontFamily: "Verdana",
+  debug: true
 };
