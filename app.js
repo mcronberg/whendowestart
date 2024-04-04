@@ -4,7 +4,7 @@ let settings = defaultSettings;
 
 window.onload = function () {
   console.log("onload");
-  console.log(settings);
+  
   const urlParams = new URLSearchParams(window.location.search);
 
   for (let param of urlParams) {
@@ -31,6 +31,7 @@ window.onload = function () {
         });
     }
   }
+  console.log(settings);
   updateUISettings();
   updateUI();
   timerTick();
