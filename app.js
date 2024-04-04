@@ -120,7 +120,7 @@ function timerTick() {
       settings.calculated.month = moment().format("MMMM");
       settings.calculated.day = moment().format("DD");
       settings.calculated.time = moment().format(settings.timeFormat);
-      settings.calculated.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
+      
 
       settings.calculated.diffInMilliseconds = settings.endTime.diff(moment());
       settings.calculated.diffInMinutes = settings.endTime.diff(moment(), "minutes");
@@ -198,7 +198,7 @@ document.querySelector("#submitDialog").addEventListener("click", function (even
       }
     }
   }
-
+  settings.calculated.endTime = findEndTime(settings.interval, settings.minuteRoundUp);
   updateUISettings();
   timerTick();
   document.querySelector("#settings-dialog").close();
