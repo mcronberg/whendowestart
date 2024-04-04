@@ -71,23 +71,6 @@ window.onload = function () {
   document.querySelector("#settings-form").appendChild(form);
 };
 
-// const settingsDialog = document.querySelector("#settings-dialog");
-// const dynamicLink = document.getElementById("dynamicLink");
-// const inputs = settingsDialog.querySelectorAll(
-//   "input[type='text'], input[type='number'], input[type='color']"
-// );
-
-// const updateLink = () => {
-//   const params = new URLSearchParams();
-//   inputs.forEach((input) => {
-//     // Only add parameter if input has a value
-//     if (input.value) {
-//       params.append(input.name, input.value);
-//     }
-//   });
-//   dynamicLink.href = `${settings.baseUrl}?${params.toString()}&start=1`;
-// };
-
 function updateUISettings() {
   moment.locale(settings.culture);
 
@@ -163,11 +146,11 @@ function timerTick() {
   }, 1000);
 }
 
-function updateUI() {
-  document.title = settings.calculated.titleText;
+function updateUI() {  
   document.querySelector(".main div").innerHTML = settings.calculated.mainText;
   document.querySelector(".headerText span").innerHTML = settings.calculated.headerText;
   document.querySelector(".footerText span").innerHTML = settings.calculated.footerText;
+  document.title = settings.calculated.titleText;
 }
 
 function findEndTime(interval, rounded) {
