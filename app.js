@@ -196,7 +196,8 @@ burgerMenu.addEventListener("click", () => {
 });
 
 document.addEventListener("keydown", function (event) {
-  if (event.key === "Enter" && burgerMenuIsActive) {
+  var activeElement = document.activeElement;
+  if (event.key === "Enter" && burgerMenuIsActive && activeElement.tagName !== "TEXTAREA") {
     document.getElementById("submitDialog").click();
   }
 });
