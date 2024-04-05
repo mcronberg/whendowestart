@@ -5,7 +5,6 @@ let settings = defaultSettings;
 window.onload = function () {
   logGroup("onload");
 
-  //document.querySelector(".grid-container").style.visibility = "hidden";
   const urlParams = new URLSearchParams(window.location.search);
 
   for (let param of urlParams) {
@@ -32,6 +31,14 @@ window.onload = function () {
         });
     }
   }
+
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    settings.debug = true;
+  }
+  else {
+    settings.debug = false;
+  }
+
 
   if (settings.debug) {
     settings.baseUrl = settings.debugBaseUrl;
