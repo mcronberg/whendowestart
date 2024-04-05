@@ -3,6 +3,16 @@ import { defaultSettings } from "./defaultSettings.js";
 let settings = defaultSettings;
 
 window.onload = function () {
+
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    settings.debug = true;
+  }
+  else {
+    settings.debug = false;
+  }
+  if (settings.debug) {
+    settings.baseUrl = settings.debugBaseUrl;
+  }
   logGroup("onload");
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -30,19 +40,10 @@ window.onload = function () {
           console.log("rest service response", settings.calculated.restServiceResponse);
         });
     }
-  }
-
-  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    settings.debug = true;
-  }
-  else {
-    settings.debug = false;
+    
   }
 
 
-  if (settings.debug) {
-    settings.baseUrl = settings.debugBaseUrl;
-  }
 
   log(settings);
 
