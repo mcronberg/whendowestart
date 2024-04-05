@@ -6,17 +6,8 @@ You can easily control text (including header and footer), font, color, image, e
 
 ## Basic use
 
-In its basic state you can use it to show static text
+In its basic state you can use it to show static text. Here is a few examples:
 
-[![Button Example]][Link]
+- [Very simple page with static text](
 
-# Shield Buttons
-
-*You can use **Badges** as buttons.*
-
-<br>
-
-[![Button Click]][Link] 
-[![Button Hover]][Link] 
-
-<br>
+We are currently on a break. The session will resume at 14:30
