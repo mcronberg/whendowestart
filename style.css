@@ -72,3 +72,9 @@ textarea {
   width: 500px;
   height: 150px;
 }
+
+#settings-form-buttons button {
+  margin-top: 10px; 
+  margin-right: 10px; 
+  padding: 10px;
+}
