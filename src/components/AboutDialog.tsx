@@ -2,51 +2,63 @@ interface Props {
     onClose: () => void
 }
 
-const SCROLL_TEXT =
-    'When Do We Start? is a free, open source countdown app for teachers and presenters. ' +
-    'Point it at your class, set the timer, and go get your coffee. ☕  ' +
-    'No login. No tracking. No ads. No nonsense. Just a big clock telling everyone when to come back.  ' +
-    'Built with React, Vite, TypeScript and Tailwind CSS.  ' +
-    'Open source — contributions welcome!  ' +
-    '— github.com/mcronberg/whendowestart  ' +
-    '                    '
-
 export function AboutDialog({ onClose }: Props) {
     return (
         <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/70"
             onClick={onClose}
         >
-            <style>{`
-        @keyframes wdws-ticker {
-          0%   { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        .wdws-ticker { animation: wdws-ticker 22s linear infinite; white-space: nowrap; }
-      `}</style>
-
             <div
-                className="bg-white rounded-2xl p-8 flex flex-col gap-5 shadow-2xl max-w-sm w-full mx-4"
+                className="bg-white rounded-2xl p-8 flex flex-col gap-5 shadow-2xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
             >
+                {/* Header */}
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-gray-800">⏱ When Do We Start?</h2>
-                    <p className="text-sm text-gray-400 mt-1">The teacher's best friend</p>
+                    <p className="text-sm text-gray-400 mt-1">The teacher's countdown display</p>
                 </div>
 
-                <div className="overflow-hidden rounded-lg bg-gray-50 py-3 border border-gray-200">
-                    <div className="wdws-ticker text-sm text-gray-600">
-                        {SCROLL_TEXT}
-                    </div>
+                {/* Author */}
+                <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 text-sm text-gray-700 leading-relaxed">
+                    <p>
+                        I'm <strong>Michell Cronberg</strong> — teacher, developer and trainer. I've been teaching
+                        for many years, and over time I kept refining a small tool I made for myself: a fullscreen
+                        countdown that tells the class exactly when we're starting again. This is that tool, now
+                        open source and free for everyone.
+                    </p>
+                    <p className="mt-2 text-gray-500 text-xs">
+                        Developed in collaboration with <strong>Claude Sonnet 4.6</strong>.
+                    </p>
                 </div>
 
-                <ul className="text-sm text-gray-600 space-y-1.5">
-                    <li>✅ No login required</li>
-                    <li>✅ Share a countdown link with students via QR or URL</li>
-                    <li>✅ Works on phone, tablet and desktop</li>
-                    <li>✅ Free &amp; open source</li>
-                </ul>
+                {/* How to use */}
+                <div>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">How to use</h3>
+                    <ol className="text-sm text-gray-600 space-y-2 list-decimal list-inside">
+                        <li>Open <strong>Settings</strong> (burger icon top right, or <kbd className="bg-gray-100 border border-gray-300 rounded px-1 text-xs">Ctrl+S</kbd>)</li>
+                        <li>Set a timer — e.g. <em>20</em> for 20 minutes, <em>14:30</em> for a fixed clock time, or <em>3pm</em></li>
+                        <li>Edit the text shown during the countdown and when time is up</li>
+                        <li>Optionally add a header, footer, background image and font</li>
+                        <li>Press <strong>Save &amp; start</strong> — the countdown begins immediately</li>
+                        <li>Put the browser in fullscreen (<kbd className="bg-gray-100 border border-gray-300 rounded px-1 text-xs">F11</kbd>) and point it at the projector or screen</li>
+                    </ol>
+                </div>
 
+                {/* Tips */}
+                <div>
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">Tips</h3>
+                    <ul className="text-sm text-gray-600 space-y-1.5">
+                        <li>📎 Use <strong>Copy link</strong> or <strong>QR code</strong> to share the exact same countdown with participants on their own devices</li>
+                        <li>✏️ The main text supports rich formatting — headings, bold, lists</li>
+                        <li>🤓 Geek mode: use <code className="bg-gray-100 rounded px-1 text-xs">{'{{'+'remaining:b'+'}}'}</code> for binary or <code className="bg-gray-100 rounded px-1 text-xs">{'{{'+'remaining:x'+'}}'}</code> for hex countdown</li>
+                        <li>🖼️ Paste any image URL as background — try Unsplash, Pexels or Pixabay</li>
+                        <li>⌨️ <kbd className="bg-gray-100 border border-gray-300 rounded px-1 text-xs">Esc</kbd> closes settings &nbsp;·&nbsp; <kbd className="bg-gray-100 border border-gray-300 rounded px-1 text-xs">Ctrl+Enter</kbd> saves</li>
+                        <li>🔁 Use <strong>Quick presets</strong> as a starting point for common scenarios</li>
+                        <li>🕐 The browser tab always shows the remaining time (MM:SS) — keep this page open in a background tab as a <strong>hidden timer</strong></li>
+                    </ul>
+                </div>
+
+                {/* Footer */}
                 <div className="flex items-center justify-between pt-2 border-t border-gray-100">
                     <a
                         href="https://github.com/mcronberg/whendowestart"

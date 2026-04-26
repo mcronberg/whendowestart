@@ -11,9 +11,15 @@ export function MainDisplay({ countdown, settings }: Props) {
     const { minutesLeft, formattedEndTime, expired } = countdown
 
     // Replace {{starttime}} / {{remaining}} placeholders before markdown parsing
+    // {{remaining:b}} = binary, {{remaining:x}} = hex, {{remaining}} = decimal
+    const formatRemaining = (fmt: string) => {
+        if (fmt === 'b') return '0b' + minutesLeft.toString(2)
+        if (fmt === 'x') return '0x' + minutesLeft.toString(16)
+        return String(minutesLeft)
+    }
     const processText = (text: string) =>
         (text || '')
-            .replace(/\{\{remaining\}\}/g, String(minutesLeft))
+            .replace(/\{\{remaining(?::([bx]))?\}\}/g, (_, fmt) => formatRemaining(fmt || ''))
             .replace(/\{\{starttime\}\}/g, formattedEndTime)
 
     const activeMainText = expired ? settings.timeoutText : settings.mainText
@@ -57,7 +63,7 @@ export function MainDisplay({ countdown, settings }: Props) {
             {/* Header */}
             {settings.headerText && (
                 <header
-                    className="relative z-10 w-full text-center px-8 py-4"
+                    className="display-content relative z-10 w-full text-center px-8 py-4"
                     style={{
                         fontSize: headerFontSize,
                         color: settings.headerColor || settings.color,
@@ -77,7 +83,7 @@ export function MainDisplay({ countdown, settings }: Props) {
                 }}
             >
                 <div
-                    className="prose prose-invert max-w-none w-full"
+                    className="display-content max-w-none w-full"
                     dangerouslySetInnerHTML={{ __html: mainHtml }}
                 />
             </main>
@@ -85,7 +91,7 @@ export function MainDisplay({ countdown, settings }: Props) {
             {/* Footer */}
             {settings.footerText && (
                 <footer
-                    className="relative z-10 w-full text-center px-8 py-4"
+                    className="display-content relative z-10 w-full text-center px-8 py-4"
                     style={{
                         fontSize: footerFontSize,
                         color: settings.footerColor || settings.color,

@@ -4,9 +4,9 @@ export const defaultSettings: Settings = {
     interval: 20,
     minuteRoundUp: true,
 
-    mainText: 'Pause\n\nWe start again soon.\n\nWe start at {{starttime}} ({{remaining}} min. left)',
+    mainText: '# Pause\n\nWe start at {{starttime}} ({{remaining}} min. left)',
     headerText: 'https://www.whendowestart.com',
-    footerText: '[https://github.com/mcronberg/whendowestart](https://github.com/mcronberg/whendowestart)',
+    footerText: '[whendowestart.com](https://whendowestart.com)',
 
     backgroundImage:
         'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80',
@@ -39,7 +39,7 @@ export const contentPresets = [
         id: 'pause',
         label: 'Pause — 10 min',
         interval: 10,
-        mainText: 'Pause\n\nWe start again soon.\n\nWe start at {{starttime}} ({{remaining}} min. left)',
+        mainText: '# Pause\n\nWe start at {{starttime}} ({{remaining}} min. left)',
         headerText: '',
         footerText: '',
         backgroundImage:

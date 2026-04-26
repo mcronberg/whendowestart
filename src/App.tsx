@@ -35,12 +35,14 @@ export default function App() {
         return () => window.removeEventListener('keydown', handler)
     }, [])
 
-    // Browser tab title
+    // Browser tab title — shows MM:SS so it works as a hidden timer in a background tab
     useEffect(() => {
         const activity = settings.headerText || settings.mainText.replace(/#+\s*/g, '').split('\n')[0]
+        const mm = String(countdown.minutesLeft).padStart(2, '0')
+        const ss = String(countdown.secondsLeft).padStart(2, '0')
         document.title = countdown.expired
-            ? `${activity} — starting now!`
-            : `${activity} (${countdown.minutesLeft} min.)`
+            ? `⏱ 00:00 — ${activity}`
+            : `⏱ ${mm}:${ss} — ${activity}`
     }, [countdown, settings.mainText, settings.headerText])
 
     const handleSave = useCallback((updated: Settings) => {

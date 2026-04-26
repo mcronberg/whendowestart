@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Settings } from '../settings/types'
 import { contentPresets } from '../settings/defaultSettings'
 import { RichTextEditor } from './RichTextEditor'
@@ -32,6 +32,15 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
     function handleSave() {
         onSave({ ...draft })
     }
+
+    useEffect(() => {
+        function onKey(e: KeyboardEvent) {
+            if (e.key === 'Escape') { onClose(); return }
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { onSave({ ...draft }) }
+        }
+        document.addEventListener('keydown', onKey)
+        return () => document.removeEventListener('keydown', onKey)
+    }, [draft, onClose, onSave])
 
     function set<K extends keyof Settings>(key: K, value: Settings[K]) {
         setDraft((d) => ({ ...d, [key]: value }))
@@ -77,7 +86,11 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                         <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{starttime}}'}</code>
                         {' '}and{' '}
                         <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining}}'}</code>
-                        {' '}to show the end time and minutes left. Delete them if you don't want a timer line.
+                        {' '}(or{' '}
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining:b}}'}</code>
+                        /{' '}
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining:x}}'}</code>
+                        {' '}for geeks 🤓) to show the end time and minutes left. Delete them if you don't want a timer line.
                     </p>
                 </div>
 
