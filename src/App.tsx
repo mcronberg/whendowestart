@@ -1,0 +1,157 @@
+import { useState, useEffect, useCallback } from 'react'
+import { useRegisterSW } from 'virtual:pwa-register/react'
+import { defaultSettings } from './settings/defaultSettings'
+import { settingsFromUrl, settingsToUrl } from './settings/urlParams'
+import { useCountdown } from './hooks/useCountdown'
+import { MainDisplay } from './components/MainDisplay'
+import { SettingsDialog } from './components/SettingsDialog'
+import { QROverlay } from './components/QROverlay'
+import { AboutDialog } from './components/AboutDialog'
+import type { Settings } from './settings/types'
+
+export default function App() {
+    const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
+
+    const [settings, setSettings] = useState<Settings>(() => ({
+        ...defaultSettings,
+        ...settingsFromUrl(),
+    }))
+    const [showSettings, setShowSettings] = useState(false)
+    const [showQR, setShowQR] = useState(false)
+    const [shareUrl, setShareUrl] = useState('')
+    const [showAbout, setShowAbout] = useState(false)
+
+    const countdown = useCountdown(settings.interval, settings.minuteRoundUp)
+
+    // Ctrl+S opens settings
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault()
+                setShowSettings(true)
+            }
+        }
+        window.addEventListener('keydown', handler)
+        return () => window.removeEventListener('keydown', handler)
+    }, [])
+
+    // Browser tab title
+    useEffect(() => {
+        const activity = settings.headerText || settings.mainText.replace(/#+\s*/g, '').split('\n')[0]
+        document.title = countdown.expired
+            ? `${activity} — starting now!`
+            : `${activity} (${countdown.minutesLeft} min.)`
+    }, [countdown, settings.mainText, settings.headerText])
+
+    const handleSave = useCallback((updated: Settings) => {
+        setSettings(updated)
+        setShowSettings(false)
+    }, [])
+
+    const handleShowQR = useCallback(() => {
+        const url = settingsToUrl(settings, countdown.endTime)
+        setShareUrl(url)
+        setShowQR(true)
+        setShowSettings(false)
+    }, [settings, countdown.endTime])
+
+    const handleCopyLink = useCallback(() => {
+        const url = settingsToUrl(settings, countdown.endTime)
+        navigator.clipboard.writeText(url).catch(() => { })
+        window.location.href = url
+    }, [settings, countdown.endTime])
+
+    return (
+        <>
+            <MainDisplay countdown={countdown} settings={settings} />
+
+            {/* Top-right controls */}
+            <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
+                {/* New version available */}
+                {needRefresh && (
+                    <button
+                        onClick={() => updateServiceWorker(true)}
+                        className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-amber-500 hover:bg-amber-400 text-white text-xs font-semibold transition animate-pulse shadow-lg"
+                        title="A new version is available — click to update"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"
+                            strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="17 8 12 3 7 8" />
+                            <line x1="12" y1="3" x2="12" y2="15" />
+                        </svg>
+                        New version
+                    </button>
+                )}
+
+                {/* About */}
+                <button
+                    onClick={() => setShowAbout(true)}
+                    className="p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition"
+                    title="About"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        className="w-5 h-5">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="16" x2="12" y2="12" />
+                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                    </svg>
+                </button>
+
+                {/* GitHub */}
+                <a
+                    href="https://github.com/mcronberg/whendowestart"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition"
+                    title="GitHub"
+                >
+                    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57
+              0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695
+              -.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99
+              .105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225
+              -.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405
+              c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225
+              0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3
+              0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                </a>
+
+                {/* Settings burger */}
+                <button
+                    onClick={() => setShowSettings(true)}
+                    className="p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition"
+                    title="Settings (Ctrl+S)"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        className="w-5 h-5">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
+
+            {showSettings && (
+                <SettingsDialog
+                    settings={settings}
+                    onSave={handleSave}
+                    onClose={() => setShowSettings(false)}
+                    onShowQR={handleShowQR}
+                    onCopyLink={handleCopyLink}
+                />
+            )}
+
+            {showQR && (
+                <QROverlay url={shareUrl} onClose={() => setShowQR(false)} />
+            )}
+
+            {showAbout && (
+                <AboutDialog onClose={() => setShowAbout(false)} />
+            )}
+        </>
+    )
+}
