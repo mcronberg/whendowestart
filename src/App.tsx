@@ -12,10 +12,18 @@ import type { Settings } from './settings/types'
 export default function App() {
     const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW()
 
-    const [settings, setSettings] = useState<Settings>(() => ({
-        ...defaultSettings,
-        ...settingsFromUrl(),
-    }))
+    const [settings, setSettings] = useState<Settings>(() => {
+        const urlOverrides = settingsFromUrl()
+        // If URL has settings, use those (shareable link). Otherwise load from localStorage.
+        if (Object.keys(urlOverrides).length > 0) {
+            return { ...defaultSettings, ...urlOverrides }
+        }
+        try {
+            const saved = localStorage.getItem('whendowestart:settings')
+            if (saved) return { ...defaultSettings, ...JSON.parse(saved) }
+        } catch { /* ignore */ }
+        return { ...defaultSettings }
+    })
     const [showSettings, setShowSettings] = useState(false)
     const [showQR, setShowQR] = useState(false)
     const [shareUrl, setShareUrl] = useState('')
@@ -49,6 +57,7 @@ export default function App() {
 
     const handleSave = useCallback((updated: Settings) => {
         setSettings(updated)
+        try { localStorage.setItem('whendowestart:settings', JSON.stringify(updated)) } catch { /* ignore */ }
         setShowSettings(false)
     }, [])
 
