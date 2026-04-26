@@ -5,15 +5,15 @@ export const defaultSettings: Settings = {
     minuteRoundUp: true,
 
     mainText: '# Pause\n\nWe start at {{starttime}} ({{remaining}} min. left)',
-    headerText: 'https://www.whendowestart.com',
-    footerText: '[whendowestart.com](https://whendowestart.com)',
+    headerText: '[whendowestart.com](https://whendowestart.com)',
+    footerText: 'See about for more information',
 
     backgroundImage:
         'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80',
     backgroundColor: '#1e293b',
 
     color: '#ffffff',
-    fontFamily: 'Inter, system-ui, sans-serif',
+    fontFamily: 'system-ui, sans-serif',
     headerSize: 50,
     footerSize: 40,
 

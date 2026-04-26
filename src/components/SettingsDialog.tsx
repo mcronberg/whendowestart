@@ -186,15 +186,18 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                         onChange={(e) => set('fontFamily', e.target.value)}
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
                     >
-                        <option value="Inter, system-ui, sans-serif">Inter (default)</option>
-                        <option value="'Roboto', sans-serif">Roboto</option>
-                        <option value="'Open Sans', sans-serif">Open Sans</option>
-                        <option value="'Lato', sans-serif">Lato</option>
-                        <option value="'Montserrat', sans-serif">Montserrat</option>
-                        <option value="'Nunito', sans-serif">Nunito</option>
-                        <option value="'Playfair Display', serif">Playfair Display</option>
-                        <option value="'Merriweather', serif">Merriweather</option>
-                        <option value="'Source Code Pro', monospace">Source Code Pro</option>
+                        <option value="system-ui, sans-serif">System default</option>
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="'Segoe UI', sans-serif">Segoe UI (Windows)</option>
+                        <option value="'Helvetica Neue', Helvetica, sans-serif">Helvetica</option>
+                        <option value="Verdana, sans-serif">Verdana</option>
+                        <option value="Trebuchet MS, sans-serif">Trebuchet MS</option>
+                        <option value="Georgia, serif">Georgia</option>
+                        <option value="'Times New Roman', serif">Times New Roman</option>
+                        <option value="Palatino, serif">Palatino</option>
+                        <option value="Impact, sans-serif">Impact</option>
+                        <option value="'Courier New', monospace">Courier New</option>
+                        <option value="'Consolas', monospace">Consolas (Windows)</option>
                     </select>
                 </div>
 

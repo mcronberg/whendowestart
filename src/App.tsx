@@ -37,9 +37,11 @@ export default function App() {
 
     // Browser tab title — shows MM:SS so it works as a hidden timer in a background tab
     useEffect(() => {
-        const activity = settings.headerText || settings.mainText.replace(/#+\s*/g, '').split('\n')[0]
+        const rawActivity = settings.headerText || settings.mainText.replace(/#+\s*/g, '').split('\n')[0]
+        // Strip markdown links [text](url) → text, and leftover markdown syntax
+        const activity = rawActivity.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`#]/g, '').trim()
         const mm = String(countdown.minutesLeft).padStart(2, '0')
-        const ss = String(countdown.secondsLeft).padStart(2, '0')
+        const ss = String(countdown.secondsLeft % 60).padStart(2, '0')
         document.title = countdown.expired
             ? `⏱ 00:00 — ${activity}`
             : `⏱ ${mm}:${ss} — ${activity}`
