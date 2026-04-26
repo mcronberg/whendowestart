@@ -50,7 +50,7 @@ export function AboutDialog({ onClose }: Props) {
                     <ul className="text-sm text-gray-600 space-y-1.5">
                         <li>📎 Use <strong>Copy link</strong> or <strong>QR code</strong> to share the exact same countdown with participants on their own devices</li>
                         <li>✏️ The main text supports rich formatting — headings, bold, lists</li>
-                        <li>🤓 Geek mode: use <code className="bg-gray-100 rounded px-1 text-xs">{'{{'+'remaining:b'+'}}'}</code> for binary or <code className="bg-gray-100 rounded px-1 text-xs">{'{{'+'remaining:x'+'}}'}</code> for hex countdown</li>
+                        <li>🤓 Geek mode: use <code className="bg-gray-100 rounded px-1 text-xs">{'{{' + 'remaining:b' + '}}'}</code> for binary or <code className="bg-gray-100 rounded px-1 text-xs">{'{{' + 'remaining:x' + '}}'}</code> for hex countdown</li>
                         <li>🖼️ Paste any image URL as background — try Unsplash, Pexels or Pixabay</li>
                         <li>⌨️ <kbd className="bg-gray-100 border border-gray-300 rounded px-1 text-xs">Esc</kbd> closes settings &nbsp;·&nbsp; <kbd className="bg-gray-100 border border-gray-300 rounded px-1 text-xs">Ctrl+Enter</kbd> saves</li>
                         <li>🔁 Use <strong>Quick presets</strong> as a starting point for common scenarios</li>
