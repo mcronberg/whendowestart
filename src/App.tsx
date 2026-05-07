@@ -25,6 +25,7 @@ export default function App() {
     const [showSettings, setShowSettings] = useState(false)
     const [showQR, setShowQR] = useState(false)
     const [showQrCorner, setShowQrCorner] = useState(false)
+    const [showSideNote, setShowSideNote] = useState(false)
     const [shareUrl, setShareUrl] = useState('')
     const [showAbout, setShowAbout] = useState(false)
 
@@ -75,10 +76,27 @@ export default function App() {
 
     return (
         <>
-            <MainDisplay countdown={countdown} settings={settings} qrUrl={settingsToUrl(settings, countdown.endTime)} showQrCorner={showQrCorner} />
+            <MainDisplay countdown={countdown} settings={settings} qrUrl={settingsToUrl(settings, countdown.endTime)} showQrCorner={showQrCorner} showSideNote={showSideNote} />
 
             {/* Top-right controls */}
             <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
+                {/* Side note toggle */}
+                {settings.sideNote && (
+                    <button
+                        onClick={() => setShowSideNote((v) => !v)}
+                        className={`p-2 rounded-full transition text-white ${showSideNote ? 'bg-blue-500/70 hover:bg-blue-500/90' : 'bg-black/30 hover:bg-black/50'}`}
+                        title={showSideNote ? 'Hide side note' : 'Show side note'}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                            strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <line x1="8" y1="8" x2="16" y2="8" />
+                            <line x1="8" y1="12" x2="16" y2="12" />
+                            <line x1="8" y1="16" x2="12" y2="16" />
+                        </svg>
+                    </button>
+                )}
+
                 {/* QR corner toggle */}
                 <button
                     onClick={() => setShowQrCorner((v) => !v)}

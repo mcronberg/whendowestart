@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { Settings } from '../settings/types'
 import { contentPresets } from '../settings/defaultSettings'
+import { backgroundPresets } from '../settings/backgroundPresets'
 import { RichTextEditor } from './RichTextEditor'
 
 interface Props {
@@ -26,9 +27,13 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
             mainText: preset.mainText,
             headerText: preset.headerText,
             footerText: preset.footerText,
+            timeoutText: preset.timeoutText,
+            sideNote: preset.sideNote,
             backgroundImage: preset.backgroundImage,
+            backgroundVideo: preset.backgroundVideo,
             interval: preset.interval,
         }))
+        setBgMode(preset.backgroundVideo ? 'video' : preset.backgroundImage ? 'image' : 'color')
         setResetKey((k) => k + 1)
     }
 
@@ -61,17 +66,51 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                 <div>
                     <label className="block text-sm font-medium mb-1">Quick presets</label>
                     <p className="text-xs text-gray-400 mb-2">Fills in content, background and timer — adjust freely afterwards.</p>
-                    <div className="flex flex-wrap gap-2">
+                    <select
+                        defaultValue=""
+                        onChange={(e) => { if (e.target.value) applyPreset(e.target.value) }}
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
+                    >
+                        <option value="" disabled>Select a preset…</option>
                         {contentPresets.map((p) => (
-                            <button
-                                key={p.id}
-                                onClick={() => applyPreset(p.id)}
-                                className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                            >
-                                {p.label}
-                            </button>
+                            <option key={p.id} value={p.id}>{p.label}</option>
                         ))}
-                    </div>
+                    </select>
+                </div>
+
+                {/* Timer */}
+                <div>
+                    <label className="block text-sm font-medium mb-1">Timer</label>
+                    <input
+                        type="text"
+                        value={String(draft.interval)}
+                        onChange={(e) => set('interval', e.target.value)}
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
+                        placeholder="20"
+                    />
+                    <p className="mt-1 text-xs text-gray-400">Minutes (e.g. <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">20</code>), clock time (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">14:30</code>), or 12h (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">3pm</code>)</p>
+                    <label className="flex items-center gap-2 text-sm cursor-pointer select-none mt-2">
+                        <input
+                            type="checkbox"
+                            checked={draft.minuteRoundUp}
+                            onChange={(e) => set('minuteRoundUp', e.target.checked)}
+                            className="rounded"
+                        />
+                        Round up to nearest 5 min
+                    </label>
+                </div>
+
+                {/* Text when time is up */}
+                <div>
+                    <label className="block text-sm font-medium mb-1">
+                        Text when time is up
+                    </label>
+                    <RichTextEditor
+                        key={`timeout-${resetKey}`}
+                        value={draft.timeoutText}
+                        onChange={(v) => set('timeoutText', v)}
+                        minHeight="5rem"
+                    />
                 </div>
 
                 {/* Main content — during timer */}
@@ -97,19 +136,6 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                     </p>
                 </div>
 
-                {/* Text when time is up */}
-                <div>
-                    <label className="block text-sm font-medium mb-1">
-                        Text when time is up
-                    </label>
-                    <RichTextEditor
-                        key={`timeout-${resetKey}`}
-                        value={draft.timeoutText}
-                        onChange={(v) => set('timeoutText', v)}
-                        minHeight="5rem"
-                    />
-                </div>
-
                 {/* Header / Footer */}
                 <div>
                     <label className="block text-sm font-medium mb-1">Header text</label>
@@ -130,35 +156,19 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                     />
                 </div>
 
-                {/* Timer */}
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">
-                            Timer
-                        </label>
-                        <input
-                            type="text"
-                            value={String(draft.interval)}
-                            onChange={(e) => set('interval', e.target.value)}
-                            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
-                            placeholder="20"
-                        />
-                        <p className="mt-1 text-xs text-gray-400">Minutes (e.g. <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">20</code>), clock time (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">14:30</code>), or 12h (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">3pm</code>)</p>
-                    </div>
-                    <div className="flex items-end pb-2">
-                        <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
-                            <input
-                                type="checkbox"
-                                checked={draft.minuteRoundUp}
-                                onChange={(e) => set('minuteRoundUp', e.target.checked)}
-                                className="rounded"
-                            />
-                            Round up to nearest 5 min
-                        </label>
-                    </div>
+                {/* Side note */}
+                <div>
+                    <label className="block text-sm font-medium mb-1">Side note</label>
+                    <RichTextEditor
+                        key={`sidenote-${resetKey}`}
+                        value={draft.sideNote}
+                        onChange={(v) => set('sideNote', v)}
+                        minHeight="4rem"
+                    />
+                    <p className="mt-1 text-xs text-gray-400">Shown in a panel on the right side — toggle with the note icon in the top-right corner. E.g. "Vi går til frokost kl. 12".</p>
                 </div>
 
-                {/* Zone colors */}
+                {/* Header / Footer */}
                 <div>
                     <label className="block text-sm font-medium mb-2">Text colors</label>
                     <div className="grid grid-cols-3 gap-3">
@@ -233,6 +243,24 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
 
                     {bgMode === 'image' ? (
                         <>
+                            {backgroundPresets.filter(p => p.type === 'image').length > 0 && (
+                                <select
+                                    value={backgroundPresets.find(p => p.value === draft.backgroundImage)?.id ?? ''}
+                                    onChange={(e) => {
+                                        const preset = backgroundPresets.find(p => p.id === e.target.value)
+                                        if (preset) set('backgroundImage', preset.value)
+                                    }}
+                                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm mb-2"
+                                >
+                                    <option value="">— select a preset image —</option>
+                                    {backgroundPresets.filter(p => p.type === 'image').map(p => (
+                                        <option key={p.id} value={p.id}>{p.label}</option>
+                                    ))}
+                                </select>
+                            )}
+                            {draft.backgroundImage && backgroundPresets.find(p => p.value === draft.backgroundImage)?.credit && (
+                                <p className="text-xs text-gray-400 mb-1 italic">{backgroundPresets.find(p => p.value === draft.backgroundImage)!.credit}</p>
+                            )}
                             <input
                                 type="text"
                                 value={draft.backgroundImage}
@@ -241,7 +269,7 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                                 placeholder="https://..."
                             />
                             <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                                <span className="text-gray-400">Free photo sites:</span>
+                                <span className="text-gray-400">Free photos:</span>
                                 {[
                                     { label: 'Unsplash', url: 'https://unsplash.com' },
                                     { label: 'Pexels', url: 'https://www.pexels.com' },
@@ -252,10 +280,27 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                                         className="text-blue-500 hover:underline">{label}</a>
                                 ))}
                             </div>
-                            <p className="mt-1 text-xs text-gray-400">Tip: right-click an image → "Copy image address" and paste it above.</p>
                         </>
                     ) : bgMode === 'video' ? (
                         <>
+                            {backgroundPresets.filter(p => p.type === 'video').length > 0 && (
+                                <select
+                                    value={backgroundPresets.find(p => p.value === draft.backgroundVideo)?.id ?? ''}
+                                    onChange={(e) => {
+                                        const preset = backgroundPresets.find(p => p.id === e.target.value)
+                                        if (preset) set('backgroundVideo', preset.value)
+                                    }}
+                                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm mb-2"
+                                >
+                                    <option value="">— select a preset video —</option>
+                                    {backgroundPresets.filter(p => p.type === 'video').map(p => (
+                                        <option key={p.id} value={p.id}>{p.label}</option>
+                                    ))}
+                                </select>
+                            )}
+                            {draft.backgroundVideo && backgroundPresets.find(p => p.value === draft.backgroundVideo)?.credit && (
+                                <p className="text-xs text-gray-400 mb-1 italic">{backgroundPresets.find(p => p.value === draft.backgroundVideo)!.credit}</p>
+                            )}
                             <input
                                 type="text"
                                 value={draft.backgroundVideo}
@@ -264,39 +309,44 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                                 placeholder="https://...mp4"
                             />
                             <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                                <span className="text-gray-400">Free video sites:</span>
+                                <span className="text-gray-400">Free videos:</span>
                                 {[
-                                    { label: 'Pexels Videos', url: 'https://www.pexels.com/videos/' },
-                                    { label: 'Pixabay Videos', url: 'https://pixabay.com/videos/' },
+                                    { label: 'Pexels', url: 'https://www.pexels.com/videos/' },
+                                    { label: 'Pixabay', url: 'https://pixabay.com/videos/' },
                                 ].map(({ label, url }) => (
                                     <a key={label} href={url} target="_blank" rel="noopener noreferrer"
                                         className="text-blue-500 hover:underline">{label}</a>
                                 ))}
                             </div>
-                            <p className="mt-1 text-xs text-gray-400">Pixabay: play the video → right-click the video itself → "Copy video address". Pexels: click the download icon → right-click a quality → "Copy link address". The download-page URL will not work.</p>
                         </>
                     ) : (
-                        <div className="flex items-center gap-3">
-                            <input
-                                type="color"
-                                value={draft.backgroundColor || '#1e293b'}
-                                onChange={(e) => set('backgroundColor', e.target.value)}
-                                className="w-10 h-10 rounded cursor-pointer border-0 p-0"
-                            />
-                            <span className="text-sm text-gray-500">{draft.backgroundColor || '#1e293b'}</span>
-                        </div>
+                        <>
+                            {backgroundPresets.filter(p => p.type === 'color').length > 0 && (
+                                <select
+                                    value={backgroundPresets.find(p => p.value === draft.backgroundColor)?.id ?? ''}
+                                    onChange={(e) => {
+                                        const preset = backgroundPresets.find(p => p.id === e.target.value)
+                                        if (preset) set('backgroundColor', preset.value)
+                                    }}
+                                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm mb-2"
+                                >
+                                    <option value="">— select a preset colour —</option>
+                                    {backgroundPresets.filter(p => p.type === 'color').map(p => (
+                                        <option key={p.id} value={p.id}>{p.label} ({p.value})</option>
+                                    ))}
+                                </select>
+                            )}
+                            <div className="flex items-center gap-3">
+                                <input
+                                    type="color"
+                                    value={draft.backgroundColor || '#1e293b'}
+                                    onChange={(e) => set('backgroundColor', e.target.value)}
+                                    className="w-10 h-10 rounded cursor-pointer border-0 p-0"
+                                />
+                                <span className="text-sm text-gray-500">{draft.backgroundColor || '#1e293b'}</span>
+                            </div>
+                        </>
                     )}
-                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                        <span className="text-gray-400">Free backgrounds:</span>
-                        {[
-                            { label: 'Unsplash (photos)', url: 'https://unsplash.com' },
-                            { label: 'Pexels (photos + video)', url: 'https://www.pexels.com' },
-                            { label: 'Pixabay (photos + video)', url: 'https://pixabay.com' },
-                        ].map(({ label, url }) => (
-                            <a key={label} href={url} target="_blank" rel="noopener noreferrer"
-                                className="text-blue-500 hover:underline">{label}</a>
-                        ))}
-                    </div>
                 </div>
 
                 {/* Actions */}

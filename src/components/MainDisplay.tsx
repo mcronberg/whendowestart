@@ -8,9 +8,10 @@ interface Props {
     settings: Settings
     qrUrl: string
     showQrCorner: boolean
+    showSideNote: boolean
 }
 
-export function MainDisplay({ countdown, settings, qrUrl, showQrCorner }: Props) {
+export function MainDisplay({ countdown, settings, qrUrl, showQrCorner, showSideNote }: Props) {
     const { minutesLeft, secondsLeft, formattedEndTime, expired, almostDone } = countdown
 
     // Replace {{starttime}} / {{remaining}} placeholders before markdown parsing
@@ -125,6 +126,15 @@ export function MainDisplay({ countdown, settings, qrUrl, showQrCorner }: Props)
                 <div className="fixed bottom-4 left-4 z-30 bg-white rounded-xl p-2 shadow-lg opacity-80 hover:opacity-100 transition-opacity">
                     <QRCodeSVG value={qrUrl} size={300} />
                 </div>
+            )}
+
+            {/* Side note — bottom-right */}
+            {showSideNote && settings.sideNote && (
+                <div
+                    className="fixed bottom-4 right-4 z-30 bg-white/90 rounded-xl p-4 shadow-lg opacity-90 hover:opacity-100 transition-opacity display-content text-center"
+                    style={{ width: '300px', fontSize: '1rem', color: '#1e293b' }}
+                    dangerouslySetInnerHTML={{ __html: marked.parse(settings.sideNote, { async: false }) as string }}
+                />
             )}
         </div>
     )

@@ -37,4 +37,7 @@ export interface Settings {
 
     // Locale
     culture: string
+
+    // Side note panel
+    sideNote: string
 }
