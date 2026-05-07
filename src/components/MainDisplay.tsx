@@ -45,7 +45,9 @@ export function MainDisplay({ countdown, settings, qrUrl, showQrCorner }: Props)
     }
 
     const bgStyle: React.CSSProperties =
-        settings.backgroundImage
+        settings.backgroundVideo
+            ? { backgroundColor: '#000' }
+            : settings.backgroundImage
             ? {
                 backgroundImage: `url(${settings.backgroundImage})`,
                 backgroundSize: 'cover',
@@ -59,8 +61,21 @@ export function MainDisplay({ countdown, settings, qrUrl, showQrCorner }: Props)
             className="fixed inset-0 flex flex-col overflow-hidden"
             style={{ ...bgStyle, ...globalStyle }}
         >
-            {/* Overlay for readability when background image is set */}
-            {settings.backgroundImage && (
+            {/* Video background */}
+            {settings.backgroundVideo && (
+                <video
+                    key={settings.backgroundVideo}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                    src={settings.backgroundVideo}
+                />
+            )}
+
+            {/* Overlay for readability when background image/video is set */}
+            {(settings.backgroundImage || settings.backgroundVideo) && (
                 <div className="absolute inset-0 bg-black/30 pointer-events-none" />
             )}
 

@@ -10,6 +10,7 @@ export interface Settings {
 
     // Background
     backgroundImage: string
+    backgroundVideo: string
     backgroundColor: string
 
     // Global styling

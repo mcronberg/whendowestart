@@ -14,6 +14,9 @@ interface Props {
 export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink }: Props) {
     const [draft, setDraft] = useState<Settings>({ ...settings })
     const [resetKey, setResetKey] = useState(0)
+    const [bgMode, setBgMode] = useState<'image' | 'video' | 'color'>(
+        settings.backgroundVideo ? 'video' : settings.backgroundImage ? 'image' : 'color'
+    )
 
     function applyPreset(presetId: string) {
         const preset = contentPresets.find((p) => p.id === presetId)
@@ -201,29 +204,99 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                     </select>
                 </div>
 
-                {/* Background image */}
+                {/* Background */}
                 <div>
-                    <label className="block text-sm font-medium mb-1">Background image URL</label>
-                    <input
-                        type="text"
-                        value={draft.backgroundImage}
-                        onChange={(e) => set('backgroundImage', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
-                        placeholder="https://..."
-                    />
-                    <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-                        <span className="text-gray-400">Free photo sites:</span>
+                    <label className="block text-sm font-medium mb-2">Background</label>
+                    <div className="flex gap-2 mb-3">
+                        <button
+                            type="button"
+                            onClick={() => { setBgMode('image'); set('backgroundVideo', '') }}
+                            className={`flex-1 py-1.5 rounded-lg border text-sm transition ${bgMode === 'image' ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-400 text-blue-600 dark:text-blue-300' : 'border-gray-300 dark:border-gray-600 text-gray-500'}`}
+                        >
+                            Image URL
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { setBgMode('video'); set('backgroundImage', '') }}
+                            className={`flex-1 py-1.5 rounded-lg border text-sm transition ${bgMode === 'video' ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-400 text-blue-600 dark:text-blue-300' : 'border-gray-300 dark:border-gray-600 text-gray-500'}`}
+                        >
+                            Video URL
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { setBgMode('color'); set('backgroundImage', ''); set('backgroundVideo', '') }}
+                            className={`flex-1 py-1.5 rounded-lg border text-sm transition ${bgMode === 'color' ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-400 text-blue-600 dark:text-blue-300' : 'border-gray-300 dark:border-gray-600 text-gray-500'}`}
+                        >
+                            Solid color
+                        </button>
+                    </div>
+
+                    {bgMode === 'image' ? (
+                        <>
+                            <input
+                                type="text"
+                                value={draft.backgroundImage}
+                                onChange={(e) => set('backgroundImage', e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
+                                placeholder="https://..."
+                            />
+                            <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                                <span className="text-gray-400">Free photo sites:</span>
+                                {[
+                                    { label: 'Unsplash', url: 'https://unsplash.com' },
+                                    { label: 'Pexels', url: 'https://www.pexels.com' },
+                                    { label: 'Pixabay', url: 'https://pixabay.com' },
+                                    { label: 'StockSnap', url: 'https://stocksnap.io' },
+                                ].map(({ label, url }) => (
+                                    <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+                                        className="text-blue-500 hover:underline">{label}</a>
+                                ))}
+                            </div>
+                            <p className="mt-1 text-xs text-gray-400">Tip: right-click an image → "Copy image address" and paste it above.</p>
+                        </>
+                    ) : bgMode === 'video' ? (
+                        <>
+                            <input
+                                type="text"
+                                value={draft.backgroundVideo}
+                                onChange={(e) => set('backgroundVideo', e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
+                                placeholder="https://...mp4"
+                            />
+                            <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                                <span className="text-gray-400">Free video sites:</span>
+                                {[
+                                    { label: 'Pexels Videos', url: 'https://www.pexels.com/videos/' },
+                                    { label: 'Pixabay Videos', url: 'https://pixabay.com/videos/' },
+                                ].map(({ label, url }) => (
+                                    <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+                                        className="text-blue-500 hover:underline">{label}</a>
+                                ))}
+                            </div>
+                            <p className="mt-1 text-xs text-gray-400">Pixabay: play the video → right-click the video itself → "Copy video address". Pexels: click the download icon → right-click a quality → "Copy link address". The download-page URL will not work.</p>
+                        </>
+                    ) : (
+                        <div className="flex items-center gap-3">
+                            <input
+                                type="color"
+                                value={draft.backgroundColor || '#1e293b'}
+                                onChange={(e) => set('backgroundColor', e.target.value)}
+                                className="w-10 h-10 rounded cursor-pointer border-0 p-0"
+                            />
+                            <span className="text-sm text-gray-500">{draft.backgroundColor || '#1e293b'}</span>
+                        </div>
+                    )}
+                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                        <span className="text-gray-400">Free backgrounds:</span>
                         {[
-                            { label: 'Unsplash', url: 'https://unsplash.com' },
-                            { label: 'Pexels', url: 'https://www.pexels.com' },
-                            { label: 'Pixabay', url: 'https://pixabay.com' },
-                            { label: 'StockSnap', url: 'https://stocksnap.io' },
+                            { label: 'Unsplash (photos)', url: 'https://unsplash.com' },
+                            { label: 'Pexels (photos + video)', url: 'https://www.pexels.com' },
+                            { label: 'Pixabay (photos + video)', url: 'https://pixabay.com' },
                         ].map(({ label, url }) => (
                             <a key={label} href={url} target="_blank" rel="noopener noreferrer"
                                 className="text-blue-500 hover:underline">{label}</a>
                         ))}
                     </div>
-                    <p className="mt-1 text-xs text-gray-400">Tip: right-click an image → "Copy image address" and paste it above.</p>
                 </div>
 
                 {/* Actions */}
