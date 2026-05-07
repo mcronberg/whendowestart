@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useRegisterSW } from 'virtual:pwa-register/react'
 import { defaultSettings } from './settings/defaultSettings'
 import { settingsFromUrl, settingsToUrl } from './settings/urlParams'
 import { useCountdown } from './hooks/useCountdown'
@@ -10,7 +9,6 @@ import { AboutDialog } from './components/AboutDialog'
 import type { Settings } from './settings/types'
 
 export default function App() {
-    useRegisterSW()
 
     const [settings, setSettings] = useState<Settings>(() => {
         const urlOverrides = settingsFromUrl()

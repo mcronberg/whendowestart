@@ -11,13 +11,14 @@ interface Props {
 }
 
 export function MainDisplay({ countdown, settings, qrUrl, showQrCorner }: Props) {
-    const { minutesLeft, formattedEndTime, expired } = countdown
+    const { minutesLeft, secondsLeft, formattedEndTime, expired, almostDone } = countdown
 
     // Replace {{starttime}} / {{remaining}} placeholders before markdown parsing
-    // {{remaining:b}} = binary, {{remaining:x}} = hex, {{remaining}} = decimal
+    // {{remaining:b}} = binary, {{remaining:x}} = hex, {{remaining}} = decimal or seconds if < 1 min
     const formatRemaining = (fmt: string) => {
         if (fmt === 'b') return '0b' + minutesLeft.toString(2)
         if (fmt === 'x') return '0x' + minutesLeft.toString(16)
+        if (almostDone) return `${secondsLeft}s`
         return String(minutesLeft)
     }
     const processText = (text: string) =>
