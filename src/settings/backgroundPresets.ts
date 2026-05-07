@@ -106,6 +106,13 @@ export const backgroundPresets: BackgroundPreset[] = [
         value: 'https://cdn.pixabay.com/video/2021/01/28/63257-505964195_large.mp4',
         credit: 'https://pixabay.com/da/videos/h%c3%a6ngek%c3%b8je-ocean-hav-slap-af-63257/',
     },
+    {
+        id: 'video-denmark-coast',
+        label: 'Danish Coast',
+        type: 'video',
+        value: 'https://cdn.pixabay.com/video/2025/03/03/262212_large.mp4',
+        credit: 'https://pixabay.com/da/videos/vestkysten-danmark-natur-hav-262212/',
+    },
 
     
 ]
