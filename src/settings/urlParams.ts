@@ -38,9 +38,11 @@ export function settingsFromUrl(): Partial<Settings> {
 }
 
 /**
- * Encode current settings + absolute end time as a shareable URL.
+ * Encode settings as a shareable URL.
+ * - Without endTime: keeps interval as-is (reusable instructor link).
+ * - With endTime: overrides interval with absolute ISO timestamp (QR code for participants).
  */
-export function settingsToUrl(settings: Settings, endTime: Date): string {
+export function settingsToUrl(settings: Settings, endTime?: Date): string {
     const params = new URLSearchParams()
     const defaults = defaultSettings as unknown as Record<string, unknown>
     const s = settings as unknown as Record<string, unknown>
@@ -51,8 +53,9 @@ export function settingsToUrl(settings: Settings, endTime: Date): string {
         params.set(key.toLowerCase(), String(value))
     }
 
-    // Always encode absolute end time (overrides interval)
-    params.set('interval', endTime.toISOString())
+    if (endTime) {
+        params.set('interval', endTime.toISOString())
+    }
 
     const base = `${window.location.origin}${window.location.pathname}`
     return `${base}?${params.toString()}`

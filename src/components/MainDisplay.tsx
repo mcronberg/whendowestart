@@ -1,13 +1,16 @@
 import { marked } from 'marked'
+import { QRCodeSVG } from 'qrcode.react'
 import type { CountdownState } from '../hooks/useCountdown'
 import type { Settings } from '../settings/types'
 
 interface Props {
     countdown: CountdownState
     settings: Settings
+    qrUrl: string
+    showQrCorner: boolean
 }
 
-export function MainDisplay({ countdown, settings }: Props) {
+export function MainDisplay({ countdown, settings, qrUrl, showQrCorner }: Props) {
     const { minutesLeft, formattedEndTime, expired } = countdown
 
     // Replace {{starttime}} / {{remaining}} placeholders before markdown parsing
@@ -99,6 +102,13 @@ export function MainDisplay({ countdown, settings }: Props) {
                     }}
                     dangerouslySetInnerHTML={{ __html: footerHtml }}
                 />
+            )}
+
+            {/* QR code — bottom-left corner */}
+            {showQrCorner && qrUrl && (
+                <div className="fixed bottom-4 left-4 z-30 bg-white rounded-xl p-2 shadow-lg opacity-80 hover:opacity-100 transition-opacity">
+                    <QRCodeSVG value={qrUrl} size={300} />
+                </div>
             )}
         </div>
     )

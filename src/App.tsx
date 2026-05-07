@@ -26,6 +26,7 @@ export default function App() {
     })
     const [showSettings, setShowSettings] = useState(false)
     const [showQR, setShowQR] = useState(false)
+    const [showQrCorner, setShowQrCorner] = useState(false)
     const [shareUrl, setShareUrl] = useState('')
     const [showAbout, setShowAbout] = useState(false)
 
@@ -69,14 +70,14 @@ export default function App() {
     }, [settings, countdown.endTime])
 
     const handleCopyLink = useCallback(() => {
-        const url = settingsToUrl(settings, countdown.endTime)
+        const url = settingsToUrl(settings)
         navigator.clipboard.writeText(url).catch(() => { })
         window.location.href = url
     }, [settings, countdown.endTime])
 
     return (
         <>
-            <MainDisplay countdown={countdown} settings={settings} />
+            <MainDisplay countdown={countdown} settings={settings} qrUrl={settingsToUrl(settings, countdown.endTime)} showQrCorner={showQrCorner} />
 
             {/* Top-right controls */}
             <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
@@ -96,6 +97,24 @@ export default function App() {
                         New version
                     </button>
                 )}
+
+                {/* QR corner toggle */}
+                <button
+                    onClick={() => setShowQrCorner((v) => !v)}
+                    className={`p-2 rounded-full transition text-white ${showQrCorner ? 'bg-blue-500/70 hover:bg-blue-500/90' : 'bg-black/30 hover:bg-black/50'}`}
+                    title={showQrCorner ? 'Hide QR code' : 'Show QR code'}
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                        strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                        <rect x="14" y="14" width="3" height="3" />
+                        <rect x="19" y="14" width="2" height="2" />
+                        <rect x="14" y="19" width="2" height="2" />
+                        <rect x="18" y="18" width="3" height="3" />
+                    </svg>
+                </button>
 
                 {/* About */}
                 <button
