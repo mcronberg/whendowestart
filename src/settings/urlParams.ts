@@ -49,7 +49,9 @@ export function settingsToUrl(settings: Settings, endTime?: Date): string {
 
     for (const key of Object.keys(defaults)) {
         const value = s[key]
-        if (value === undefined || value === null || value === '') continue
+        if (value === undefined || value === null) continue
+        // Always include the value, even if empty string — so recipients don't
+        // fall back to a different default (e.g. backgroundVideo)
         params.set(key.toLowerCase(), String(value))
     }
 
