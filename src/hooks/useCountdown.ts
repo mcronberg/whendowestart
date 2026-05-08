@@ -30,7 +30,11 @@ export function parseEndTime(interval: number | string, roundUp: boolean): Date 
     // "HH:mm" time string  e.g. "14:30"
     if (typeof interval === 'string' && /^\d{1,2}:\d{2}$/.test(interval)) {
         const [h, m] = interval.split(':').map(Number)
-        const t = dayjs().hour(h).minute(m).second(0)
+        let t = dayjs().hour(h).minute(m).second(0)
+        // If the time has already passed today, assume it means tomorrow
+        if (t.isBefore(dayjs())) {
+            t = t.add(1, 'day')
+        }
         return t.toDate()
     }
 

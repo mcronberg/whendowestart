@@ -79,6 +79,28 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                     </select>
                 </div>
 
+                {/* Timer */}
+                <div>
+                    <label className="block text-sm font-medium mb-1">Timer</label>
+                    <input
+                        type="text"
+                        value={String(draft.interval)}
+                        onChange={(e) => set('interval', e.target.value)}
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
+                        placeholder="20"
+                    />
+                    <p className="mt-1 text-xs text-gray-400">Minutes (e.g. <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">20</code>), clock time (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">14:30</code>), or 12h (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">3pm</code>)</p>
+                    <label className="flex items-center gap-2 text-sm cursor-pointer select-none mt-2">
+                        <input
+                            type="checkbox"
+                            checked={draft.minuteRoundUp}
+                            onChange={(e) => set('minuteRoundUp', e.target.checked)}
+                            className="rounded"
+                        />
+                        Round up to nearest 5 min
+                    </label>
+                </div>
+
                 {/* Main content — during timer */}
                 <div>
                     <label className="block text-sm font-medium mb-1">
@@ -100,28 +122,6 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                         <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining:x}}'}</code>
                         {' '}for geeks 🤓) to show the end time and minutes left. Delete them if you don't want a timer line.
                     </p>
-                </div>
-
-                {/* Timer */}
-                <div>
-                    <label className="block text-sm font-medium mb-1">Timer</label>
-                    <input
-                        type="text"
-                        value={String(draft.interval)}
-                        onChange={(e) => set('interval', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm"
-                        placeholder="20"
-                    />
-                    <p className="mt-1 text-xs text-gray-400">Minutes (e.g. <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">20</code>), clock time (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">14:30</code>), or 12h (<code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">3pm</code>)</p>
-                    <label className="flex items-center gap-2 text-sm cursor-pointer select-none mt-2">
-                        <input
-                            type="checkbox"
-                            checked={draft.minuteRoundUp}
-                            onChange={(e) => set('minuteRoundUp', e.target.checked)}
-                            className="rounded"
-                        />
-                        Round up to nearest 5 min
-                    </label>
                 </div>
 
                 {/* Text when time is up */}
