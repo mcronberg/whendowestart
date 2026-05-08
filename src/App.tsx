@@ -18,7 +18,20 @@ export default function App() {
         }
         try {
             const saved = localStorage.getItem('whendowestart:settings')
-            if (saved) return { ...defaultSettings, ...JSON.parse(saved) }
+            if (saved) {
+                const parsed: Settings = { ...defaultSettings, ...JSON.parse(saved) }
+                // Convert any leftover relative minutes to absolute clock time
+                const isRelative =
+                    typeof parsed.interval === 'number' ||
+                    (typeof parsed.interval === 'string' && /^\d+$/.test(parsed.interval.trim()))
+                if (isRelative) {
+                    const endTime = parseEndTime(parsed.interval, parsed.minuteRoundUp)
+                    const h = String(endTime.getHours()).padStart(2, '0')
+                    const m = String(endTime.getMinutes()).padStart(2, '0')
+                    parsed.interval = `${h}:${m}`
+                }
+                return parsed
+            }
         } catch { /* ignore */ }
         return { ...defaultSettings }
     })
@@ -72,7 +85,7 @@ export default function App() {
     }, [])
 
     const handleReset = useCallback(() => {
-        try { localStorage.removeItem('whendowestart:settings') } catch { /* ignore */ }
+        try { localStorage.clear() } catch { /* ignore */ }
         window.history.replaceState({}, '', window.location.pathname)
         setSettings({ ...defaultSettings })
         setShowSettings(false)
