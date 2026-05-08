@@ -79,6 +79,29 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                     </select>
                 </div>
 
+                {/* Main content — during timer */}
+                <div>
+                    <label className="block text-sm font-medium mb-1">
+                        Text while timer is running
+                    </label>
+                    <RichTextEditor
+                        key={`main-${resetKey}`}
+                        value={draft.mainText}
+                        onChange={(v) => set('mainText', v)}
+                    />
+                    <p className="mt-1 text-xs text-gray-400">
+                        Use{' '}
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{starttime}}'}</code>
+                        {' '}and{' '}
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining}}'}</code>
+                        {' '}(or{' '}
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining:b}}'}</code>
+                        /{' '}
+                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining:x}}'}</code>
+                        {' '}for geeks 🤓) to show the end time and minutes left. Delete them if you don't want a timer line.
+                    </p>
+                </div>
+
                 {/* Timer */}
                 <div>
                     <label className="block text-sm font-medium mb-1">Timer</label>
@@ -112,29 +135,6 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                         onChange={(v) => set('timeoutText', v)}
                         minHeight="5rem"
                     />
-                </div>
-
-                {/* Main content — during timer */}
-                <div>
-                    <label className="block text-sm font-medium mb-1">
-                        Text while timer is running
-                    </label>
-                    <RichTextEditor
-                        key={`main-${resetKey}`}
-                        value={draft.mainText}
-                        onChange={(v) => set('mainText', v)}
-                    />
-                    <p className="mt-1 text-xs text-gray-400">
-                        Use{' '}
-                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{starttime}}'}</code>
-                        {' '}and{' '}
-                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining}}'}</code>
-                        {' '}(or{' '}
-                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining:b}}'}</code>
-                        /{' '}
-                        <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{{remaining:x}}'}</code>
-                        {' '}for geeks 🤓) to show the end time and minutes left. Delete them if you don't want a timer line.
-                    </p>
                 </div>
 
                 {/* Header / Footer */}

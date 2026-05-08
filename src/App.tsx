@@ -104,9 +104,20 @@ export default function App() {
         window.location.href = url
     }, [settings, countdown.endTime])
 
+    const buildDate = typeof __BUILD_DATE__ !== 'undefined'
+        ? new Date(__BUILD_DATE__).toLocaleDateString('da-DK', { day: '2-digit', month: '2-digit', year: '2-digit' })
+        : null
+
     return (
         <>
             <MainDisplay countdown={countdown} settings={settings} qrUrl={settingsToUrl(settings, countdown.endTime)} showQrCorner={showQrCorner} showSideNote={showSideNote} />
+
+            {/* Build date — top-left */}
+            {buildDate && (
+                <div className="fixed bottom-2 left-2 z-40 text-white/30 text-[10px] select-none pointer-events-none">
+                    {buildDate}
+                </div>
+            )}
 
             {/* Top-right controls */}
             <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
