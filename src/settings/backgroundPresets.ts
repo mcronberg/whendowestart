@@ -113,6 +113,13 @@ export const backgroundPresets: BackgroundPreset[] = [
         value: 'https://cdn.pixabay.com/video/2025/03/03/262212_large.mp4',
         credit: 'https://pixabay.com/da/videos/vestkysten-danmark-natur-hav-262212/',
     },
+        {
+        id: 'video-time',
+        label: 'Time',
+        type: 'video',
+        value: 'https://cdn.pixabay.com/video/2023/02/25/152183-802330879_tiny.mp4',
+        credit: 'https://pixabay.com/users/bellahu123-10783290/',
+    },
 
     
 ]
