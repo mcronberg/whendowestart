@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { defaultSettings } from './settings/defaultSettings'
 import { settingsFromUrl, settingsToUrl } from './settings/urlParams'
-import { useCountdown } from './hooks/useCountdown'
+import { useCountdown, parseEndTime } from './hooks/useCountdown'
 import { MainDisplay } from './components/MainDisplay'
 import { SettingsDialog } from './components/SettingsDialog'
 import { QROverlay } from './components/QROverlay'
@@ -56,6 +56,16 @@ export default function App() {
     }, [countdown, settings.mainText, settings.headerText])
 
     const handleSave = useCallback((updated: Settings) => {
+        // Convert relative minutes to absolute clock time so subsequent edits don't shift the timer
+        const isRelativeMinutes =
+            typeof updated.interval === 'number' ||
+            (typeof updated.interval === 'string' && /^\d+$/.test(updated.interval.trim()))
+        if (isRelativeMinutes) {
+            const endTime = parseEndTime(updated.interval, updated.minuteRoundUp)
+            const h = String(endTime.getHours()).padStart(2, '0')
+            const m = String(endTime.getMinutes()).padStart(2, '0')
+            updated = { ...updated, interval: `${h}:${m}` }
+        }
         setSettings(updated)
         try { localStorage.setItem('whendowestart:settings', JSON.stringify(updated)) } catch { /* ignore */ }
         setShowSettings(false)
