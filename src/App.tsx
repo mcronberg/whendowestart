@@ -61,6 +61,13 @@ export default function App() {
         setShowSettings(false)
     }, [])
 
+    const handleReset = useCallback(() => {
+        try { localStorage.removeItem('whendowestart:settings') } catch { /* ignore */ }
+        window.history.replaceState({}, '', window.location.pathname)
+        setSettings({ ...defaultSettings })
+        setShowSettings(false)
+    }, [])
+
     const handleShowQR = useCallback(() => {
         const url = settingsToUrl(settings, countdown.endTime)
         setShareUrl(url)
@@ -80,6 +87,18 @@ export default function App() {
 
             {/* Top-right controls */}
             <div className="fixed top-4 right-4 z-40 flex items-center gap-2">
+                {/* +5 / +10 min */}
+                <button
+                    onClick={() => countdown.addMinutes(5)}
+                    className="p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition text-xs font-semibold w-9 h-9 flex items-center justify-center"
+                    title="Add 5 minutes"
+                >+5</button>
+                <button
+                    onClick={() => countdown.addMinutes(10)}
+                    className="p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition text-xs font-semibold w-9 h-9 flex items-center justify-center"
+                    title="Add 10 minutes"
+                >+10</button>
+
                 {/* Side note toggle */}
                 {settings.sideNote && (
                     <button
@@ -173,6 +192,7 @@ export default function App() {
                     onClose={() => setShowSettings(false)}
                     onShowQR={handleShowQR}
                     onCopyLink={handleCopyLink}
+                    onReset={handleReset}
                 />
             )}
 

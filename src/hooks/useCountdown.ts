@@ -11,6 +11,7 @@ export interface CountdownState {
     formattedEndTime: string
     expired: boolean
     almostDone: boolean // < 60 seconds left
+    addMinutes: (minutes: number) => void
 }
 
 /**
@@ -65,7 +66,12 @@ export function parseEndTime(interval: number | string, roundUp: boolean): Date 
 
 export function useCountdown(interval: number | string, roundUp: boolean): CountdownState {
     const endTimeRef = useRef<Date>(parseEndTime(interval, roundUp))
-    const [state, setState] = useState<CountdownState>(() => computeState(endTimeRef.current))
+    const [state, setState] = useState<CountdownState>(() => computeState(endTimeRef.current, addMinutesImpl))
+
+    function addMinutesImpl(minutes: number) {
+        endTimeRef.current = dayjs(endTimeRef.current).add(minutes, 'minute').toDate()
+        setState(computeState(endTimeRef.current, addMinutesImpl))
+    }
 
     // Recompute end time when interval/roundUp changes (but not on every tick)
     const prevIntervalRef = useRef(interval)
@@ -79,7 +85,7 @@ export function useCountdown(interval: number | string, roundUp: boolean): Count
     }, [interval, roundUp])
 
     useEffect(() => {
-        const tick = () => setState(computeState(endTimeRef.current))
+        const tick = () => setState(computeState(endTimeRef.current, addMinutesImpl))
         tick()
         const id = setInterval(tick, 1000)
         return () => clearInterval(id)
@@ -88,7 +94,7 @@ export function useCountdown(interval: number | string, roundUp: boolean): Count
     return state
 }
 
-function computeState(endTime: Date): CountdownState {
+function computeState(endTime: Date, addMinutes: (minutes: number) => void): CountdownState {
     const now = dayjs()
     const end = dayjs(endTime)
     const diffMs = end.diff(now)
@@ -102,5 +108,6 @@ function computeState(endTime: Date): CountdownState {
         formattedEndTime: end.format('HH:mm'),
         expired: secondsLeft <= 0,
         almostDone: secondsLeft > 0 && secondsLeft < 60,
+        addMinutes,
     }
 }

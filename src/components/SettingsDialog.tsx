@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { Settings } from '../settings/types'
-import { contentPresets } from '../settings/defaultSettings'
+import { contentPresets, defaultSettings } from '../settings/defaultSettings'
 import { backgroundPresets } from '../settings/backgroundPresets'
 import { RichTextEditor } from './RichTextEditor'
 
@@ -10,9 +10,10 @@ interface Props {
     onClose: () => void
     onShowQR: () => void
     onCopyLink: () => void
+    onReset: () => void
 }
 
-export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink }: Props) {
+export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink, onReset }: Props) {
     const [draft, setDraft] = useState<Settings>({ ...settings })
     const [resetKey, setResetKey] = useState(0)
     const [bgMode, setBgMode] = useState<'image' | 'video' | 'color'>(
@@ -22,8 +23,8 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
     function applyPreset(presetId: string) {
         const preset = contentPresets.find((p) => p.id === presetId)
         if (!preset) return
-        setDraft((d) => ({
-            ...d,
+        setDraft({
+            ...defaultSettings,
             mainText: preset.mainText,
             headerText: preset.headerText,
             footerText: preset.footerText,
@@ -32,7 +33,7 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
             backgroundImage: preset.backgroundImage,
             backgroundVideo: preset.backgroundVideo,
             interval: preset.interval,
-        }))
+        })
         setBgMode(preset.backgroundVideo ? 'video' : preset.backgroundImage ? 'image' : 'color')
         setResetKey((k) => k + 1)
     }
@@ -383,6 +384,13 @@ export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink
                         </button>
                     </div>
                     <div className="flex gap-2">
+                        <button
+                            onClick={onReset}
+                            className="px-4 py-2 rounded-lg text-sm border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
+                            title="Clear all settings, remove URL params and reset to defaults"
+                        >
+                            Reset all
+                        </button>
                         <button
                             onClick={onClose}
                             className="px-4 py-2 rounded-lg text-sm border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
