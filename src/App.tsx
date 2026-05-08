@@ -64,8 +64,8 @@ export default function App() {
         const mm = String(countdown.minutesLeft).padStart(2, '0')
         const ss = String(countdown.secondsLeft % 60).padStart(2, '0')
         document.title = countdown.expired
-            ? `⏱ 00:00 — ${activity}`
-            : `⏱ ${mm}:${ss} — ${activity}`
+            ? `00:00 — ${activity}`
+            : `${mm}:${ss} — ${activity}`
     }, [countdown, settings.mainText, settings.headerText])
 
     const handleSave = useCallback((updated: Settings) => {
@@ -105,7 +105,7 @@ export default function App() {
     }, [settings, countdown.endTime])
 
     const buildDate = typeof __BUILD_DATE__ !== 'undefined'
-        ? new Date(__BUILD_DATE__).toLocaleDateString('da-DK', { day: '2-digit', month: '2-digit', year: '2-digit' })
+        ? new Date(__BUILD_DATE__).toLocaleString('da-DK', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })
         : null
 
     return (
@@ -114,8 +114,8 @@ export default function App() {
 
             {/* Build date — top-left */}
             {buildDate && (
-                <div className="fixed bottom-2 left-2 z-40 text-white/30 text-[10px] select-none pointer-events-none">
-                    {buildDate}
+                <div className="fixed top-2 left-2 z-40 text-white/50 text-[10px] select-none pointer-events-none" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+                    Build: {buildDate}
                 </div>
             )}
 
