@@ -1,3 +1,16 @@
+export interface ContentPreset {
+    id: string
+    label: string
+    interval: number | string
+    mainText: string
+    headerText: string
+    footerText: string
+    timeoutText: string
+    sideNote: string
+    backgroundImage: string
+    backgroundVideo: string
+}
+
 export interface Settings {
     // Timer
     interval: number | string // minutes (number) or "HH:mm" (string)

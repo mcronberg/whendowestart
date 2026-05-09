@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react'
 import { defaultSettings } from './settings/defaultSettings'
 import { settingsFromUrl, settingsToUrl } from './settings/urlParams'
 import { useCountdown, parseEndTime } from './hooks/useCountdown'
+import { usePresets } from './hooks/usePresets'
+import { useVersionCheck } from './hooks/useVersionCheck'
 import { MainDisplay } from './components/MainDisplay'
 import { SettingsDialog } from './components/SettingsDialog'
 import { QROverlay } from './components/QROverlay'
@@ -43,6 +45,10 @@ export default function App() {
     const [showAbout, setShowAbout] = useState(false)
 
     const countdown = useCountdown(settings.interval, settings.minuteRoundUp)
+    const { backgroundPresets, contentPresets } = usePresets()
+    const hasUpdate = useVersionCheck()
+    const [updateDismissed, setUpdateDismissed] = useState(false)
+    const updateAvailable = hasUpdate && !updateDismissed
 
     // Ctrl+S opens settings
     useEffect(() => {
@@ -116,6 +122,23 @@ export default function App() {
             {buildDate && (
                 <div className="fixed top-2 left-2 z-40 text-white/50 text-[10px] select-none pointer-events-none" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
                     Build: {buildDate}
+                </div>
+            )}
+
+            {/* Update available banner */}
+            {updateAvailable && (
+                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-yellow-400 text-yellow-900 rounded-xl shadow-xl px-5 py-3 flex items-start gap-3 max-w-sm w-full mx-4">
+                    <span className="text-xl mt-0.5">🔄</span>
+                    <div className="flex-1 text-sm">
+                        <p className="font-semibold">En ny version er tilgængelig!</p>
+                        <p className="mt-0.5">Tryk <kbd className="bg-yellow-200 border border-yellow-500 rounded px-1 font-mono text-xs">Ctrl+F5</kbd> for at hente den nyeste version.</p>
+                        <p className="mt-0.5 text-xs text-yellow-800">Du kan også nulstille dine indstillinger via <em>Settings → Reset all</em>.</p>
+                    </div>
+                    <button
+                        onClick={() => setUpdateDismissed(true)}
+                        className="text-yellow-700 hover:text-yellow-900 text-xl leading-none mt-0.5"
+                        title="Luk"
+                    >&times;</button>
                 </div>
             )}
 
@@ -222,6 +245,8 @@ export default function App() {
             {showSettings && (
                 <SettingsDialog
                     settings={settings}
+                    backgroundPresets={backgroundPresets}
+                    contentPresets={contentPresets}
                     onSave={handleSave}
                     onClose={() => setShowSettings(false)}
                     onShowQR={handleShowQR}

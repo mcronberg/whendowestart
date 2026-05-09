@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
-import type { Settings } from '../settings/types'
-import { contentPresets, defaultSettings } from '../settings/defaultSettings'
-import { backgroundPresets } from '../settings/backgroundPresets'
+import type { Settings, ContentPreset } from '../settings/types'
+import { defaultSettings } from '../settings/defaultSettings'
+import type { BackgroundPreset } from '../settings/backgroundPresets'
 import { RichTextEditor } from './RichTextEditor'
 
 interface Props {
     settings: Settings
+    backgroundPresets: BackgroundPreset[]
+    contentPresets: ContentPreset[]
     onSave: (settings: Settings) => void
     onClose: () => void
     onShowQR: () => void
@@ -13,7 +15,7 @@ interface Props {
     onReset: () => void
 }
 
-export function SettingsDialog({ settings, onSave, onClose, onShowQR, onCopyLink, onReset }: Props) {
+export function SettingsDialog({ settings, backgroundPresets, contentPresets, onSave, onClose, onShowQR, onCopyLink, onReset }: Props) {
     const [draft, setDraft] = useState<Settings>({ ...settings })
     const [resetKey, setResetKey] = useState(0)
     const [bgMode, setBgMode] = useState<'image' | 'video' | 'color'>(
