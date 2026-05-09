@@ -9,6 +9,7 @@ export interface ContentPreset {
     sideNote: string
     backgroundImage: string
     backgroundVideo: string
+    credit?: string
 }
 
 export interface Settings {

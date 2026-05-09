@@ -9,7 +9,8 @@
         "timeoutText": "# This is my timer\n\nWe're starting now!",
         "sideNote": "This is my sidebar\n\nExtra info here.\n\n---\n\nVideo by [bellahu123](https://pixabay.com/users/bellahu123-10783290/) via Pixabay",
         "backgroundImage": "",
-        "backgroundVideo": "https://cdn.pixabay.com/video/2023/02/25/152183-802330879_tiny.mp4"
+        "backgroundVideo": "https://cdn.pixabay.com/video/2023/02/25/152183-802330879_tiny.mp4",
+        "credit": "Pixabay — https://pixabay.com/videos/152183/"
     },
     {
         "id": "break-5",
@@ -21,7 +22,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1495474472287-4d71bcdd2085"
     },
     {
         "id": "break-10",
@@ -33,7 +35,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1495474472287-4d71bcdd2085"
     },
     {
         "id": "break-15",
@@ -45,7 +48,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1495474472287-4d71bcdd2085"
     },
     {
         "id": "lunch-30",
@@ -57,7 +61,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1517248135467-4c7edcad34c4"
     },
     {
         "id": "lunch",
@@ -69,7 +74,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1517248135467-4c7edcad34c4"
     },
     {
         "id": "geek-lunch",
@@ -81,7 +87,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "",
-        "backgroundVideo": "https://cdn.pixabay.com/video/2017/07/23/10878-226635359_large.mp4"
+        "backgroundVideo": "https://cdn.pixabay.com/video/2017/07/23/10878-226635359_large.mp4",
+        "credit": "Pixabay — https://pixabay.com/videos/10878/"
     },
     {
         "id": "exercise-5",
@@ -93,7 +100,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1434030216411-0b793f4b4173"
     },
     {
         "id": "exercise-10",
@@ -105,7 +113,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1434030216411-0b793f4b4173"
     },
     {
         "id": "exercise-15",
@@ -117,7 +126,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1434030216411-0b793f4b4173"
     },
     {
         "id": "exercise-20",
@@ -129,7 +139,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1434030216411-0b793f4b4173"
     },
     {
         "id": "exercise-30",
@@ -141,7 +152,8 @@
         "timeoutText": "# We're starting now!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1434030216411-0b793f4b4173"
     },
     {
         "id": "dismissed",
@@ -153,7 +165,8 @@
         "timeoutText": "# Have a great day!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1523050854058-8df90110c9f1"
     },
     {
         "id": "exam",
@@ -165,6 +178,7 @@
         "timeoutText": "# Time is up!",
         "sideNote": "",
         "backgroundImage": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1920&q=80",
-        "backgroundVideo": ""
+        "backgroundVideo": "",
+        "credit": "Unsplash — https://unsplash.com/photos/1606326608606-aa0b62935f2b"
     }
 ]

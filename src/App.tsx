@@ -41,6 +41,7 @@ export default function App() {
     const [showQR, setShowQR] = useState(false)
     const [showQrCorner, setShowQrCorner] = useState(false)
     const [showSideNote, setShowSideNote] = useState(false)
+    const [showCredit, setShowCredit] = useState(false)
     const [shareUrl, setShareUrl] = useState('')
     const [showAbout, setShowAbout] = useState(false)
 
@@ -114,30 +115,42 @@ export default function App() {
         ? new Date(__BUILD_DATE__).toLocaleString('da-DK', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })
         : null
 
+    const activeCredit = (
+        backgroundPresets.find(
+            (p) => p.value === settings.backgroundVideo || p.value === settings.backgroundImage || p.value === settings.backgroundColor
+        )?.credit ??
+        contentPresets.find(
+            (p) => p.backgroundVideo === settings.backgroundVideo || p.backgroundImage === settings.backgroundImage
+        )?.credit ??
+        null
+    )
+
     return (
         <>
             <MainDisplay countdown={countdown} settings={settings} qrUrl={settingsToUrl(settings, countdown.endTime)} showQrCorner={showQrCorner} showSideNote={showSideNote} />
 
-            {/* Build date — top-left */}
-            {buildDate && (
-                <div className="fixed top-2 left-2 z-40 text-white/50 text-[10px] select-none pointer-events-none" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
-                    Build: {buildDate}
-                </div>
-            )}
+            {/* Build date + credit — top-left */}
+            <div className="fixed top-2 left-2 z-40 flex flex-col gap-0.5">
+                {buildDate && (
+                    <div className="text-white/50 text-[10px] select-none pointer-events-none" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+                        Build: {buildDate}
+                    </div>
+                )}
+                {showCredit && activeCredit && (
+                    <div className="text-white/60 text-[10px] max-w-xs" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+                        {activeCredit}
+                    </div>
+                )}
+            </div>
 
             {/* Update available banner */}
             {updateAvailable && (
-                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-yellow-400 text-yellow-900 rounded-xl shadow-xl px-5 py-3 flex items-start gap-3 max-w-sm w-full mx-4">
-                    <span className="text-xl mt-0.5">🔄</span>
-                    <div className="flex-1 text-sm">
-                        <p className="font-semibold">En ny version er tilgængelig!</p>
-                        <p className="mt-0.5">Tryk <kbd className="bg-yellow-200 border border-yellow-500 rounded px-1 font-mono text-xs">Ctrl+F5</kbd> for at hente den nyeste version.</p>
-                        <p className="mt-0.5 text-xs text-yellow-800">Du kan også nulstille dine indstillinger via <em>Settings → Reset all</em>.</p>
-                    </div>
+                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-black/70 text-white/90 text-xs rounded-full px-4 py-2 shadow-lg backdrop-blur-sm">
+                    <span>New version available — press <kbd className="bg-white/20 rounded px-1 font-mono">Ctrl+F5</kbd> to reload</span>
                     <button
                         onClick={() => setUpdateDismissed(true)}
-                        className="text-yellow-700 hover:text-yellow-900 text-xl leading-none mt-0.5"
-                        title="Luk"
+                        className="text-white/60 hover:text-white leading-none text-base"
+                        title="Dismiss"
                     >&times;</button>
                 </div>
             )}
@@ -171,6 +184,15 @@ export default function App() {
                             <line x1="8" y1="16" x2="12" y2="16" />
                         </svg>
                     </button>
+                )}
+
+                {/* Credit toggle — only shown when background has a credit */}
+                {activeCredit && (
+                    <button
+                        onClick={() => setShowCredit((v) => !v)}
+                        className={`p-2 rounded-full transition text-white text-xs font-bold w-9 h-9 flex items-center justify-center ${showCredit ? 'bg-blue-500/70 hover:bg-blue-500/90' : 'bg-black/30 hover:bg-black/50'}`}
+                        title={showCredit ? 'Hide credit' : 'Show credit'}
+                    >©</button>
                 )}
 
                 {/* QR corner toggle */}
