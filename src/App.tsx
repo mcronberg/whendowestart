@@ -248,6 +248,22 @@ export default function App() {
                     </svg>
                 </a>
 
+                {/* Ko-fi */}
+                <a
+                    href="https://ko-fi.com/mcronberg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition"
+                    title="Support me on Ko-fi"
+                >
+                    <svg viewBox="0 0 24 24" className="w-5 h-5">
+                        <rect x="3" y="5" width="14" height="14" rx="6" fill="none" stroke="currentColor" strokeWidth="1.7" />
+                        <path d="M17 9c1.9 0 3.3 1.15 3.3 3s-1.4 3-3.3 3" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                        <path d="M10 10.3c-.85-.95-2.25-.95-3 .1-.75.95-.55 2.25.4 3.1l2.6 2.3 2.6-2.3c.95-.85 1.15-2.15.4-3.1
+              -.75-1.05-2.15-1.05-3 -.1z" fill="#FF5E5B" />
+                    </svg>
+                </a>
+
                 {/* Settings burger */}
                 <button
                     onClick={() => setShowSettings(true)}

@@ -4,6 +4,8 @@
 
 🌐 **[whendowestart.com](https://whendowestart.com)**
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/T3L723V2N8)
+
 ![Screenshot showing "Pause – We start at 14:30 (20 min. left)" on a coffee background](https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80)
 
 ## Features
